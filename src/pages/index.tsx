@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   return (
-    <div className="grid gap-10 bg-slate-400 py-20 px-20">
+    <div className="grid min-h-screen gap-10 bg-slate-400 py-20 px-20">
       <div className="rounded-3xl bg-white p-6 shadow-xl ">
         <span className="text-3xl font-semibold">Select Item</span>
         <div className="my-2 flex justify-between text-gray-500">
@@ -44,7 +44,42 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="rounded-3xl bg-white p-10 shadow-2xl"></div>
-      <div className="rounded-3xl bg-white p-10 shadow-2xl"></div>
+      <div className="rounded-3xl bg-white p-10 shadow-2xl">
+        <div className="mb-5 flex items-center justify-between">
+          <span>⬅️</span>
+          <div className="space-x-3">
+            <span>🌟 4.9</span>
+            <span className="rounded-md p-2 shadow-xl">💖</span>
+          </div>
+        </div>
+        <div className="mb-5 h-72 bg-zinc-400" />
+        <div className="flex flex-col">
+          <span className=" text-xl font-medium">Swoon Lounge</span>
+          <span className="text-us text-gray-500">Chair</span>
+          <div className="mt-3 mb-5 flex items-center justify-between">
+            <div>
+              <input type="radio" name="" id="" />
+              <input type="radio" name="" id="" />
+              <input type="radio" name="" id="" />
+            </div>
+            <div className="flex items-center space-x-5">
+              <button className="aspect-square w-8 items-center justify-center rounded-xl bg-blue-200 p-1.5 text-xl text-gray-500">
+                -
+              </button>
+              <span>1</span>
+              <button className="aspect-square w-8 items-center justify-center rounded-xl bg-blue-200 p-1.5 text-xl text-gray-500">
+                +
+              </button>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-2xl font-medium">$450</span>
+            <button className="rounded-lg bg-blue-500 py-2 px-8 text-center text-xs text-white">
+              Add to cart
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
