@@ -3,12 +3,20 @@ import type { NextPage } from "next";
 const Home: NextPage = () => {
   return (
     <div className="flex flex-col space-y-2  p-5 ">
-      <ul className="list-decimal marker:text-teal-500">
-        <li>hi</li>
-        <li>hi</li>
-        <li>hi</li>
-      </ul>
+      <input
+        type="file"
+        className="file:cursor-pointer file:rounded-xl file:border-0 file:bg-purple-400 file:px-5 file:text-white file:transition-colors file:hover:bg-white file:hover:text-purple-400"
+      />
     </div>
+
+    // deciaml
+    // <div className="flex flex-col space-y-2  p-5 ">
+    //   <ul className="list-decimal marker:text-teal-500">
+    //     <li>hi</li>
+    //     <li>hi</li>
+    //     <li>hi</li>
+    //   </ul>
+    // </div>
 
     // detail 태그
     // <div className="flex flex-col space-y-2  p-5 ">
