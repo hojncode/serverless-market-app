@@ -2,24 +2,34 @@ import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   return (
-    <form className="flex flex-col space-y-2  p-5 ">
-      <input
-        type="text"
-        required
-        placeholder="Username"
-        className="peer rounded-md border border-gray-400 p-1 "
-      />
-      <span className="hidden peer-invalid:block peer-invalid:text-red-500">
-        This input is invalid
-      </span>
-      <span className="hidden peer-valid:block peer-valid:text-teal-500">
-        Awesome username
-      </span>
-      <span className="hidden peer-hover:block peer-hover:text-amber-500">
-        Hello
-      </span>
-      <input type="submit" value="Login" className="bg-white" />
-    </form>
+    <div className="flex flex-col space-y-2  p-5 ">
+      <details className="select-none open:bg-indigo-400 open:text-white">
+        <summary className="cursor-pointer">What is my fav. food.</summary>
+        <span className="selection:bg-indigo-600 selection:text-white">
+          rice
+        </span>
+      </details>
+    </div>
+
+    // 두번째 css
+    // <form className="flex flex-col space-y-2  p-5 ">
+    //   <input
+    //     type="text"
+    //     required
+    //     placeholder="Username"
+    //     className="peer rounded-md border border-gray-400 p-1 "
+    //   />
+    //   <span className="hidden peer-invalid:block peer-invalid:text-red-500">
+    //     This input is invalid
+    //   </span>
+    //   <span className="hidden peer-valid:block peer-valid:text-teal-500">
+    //     Awesome username
+    //   </span>
+    //   <span className="hidden peer-hover:block peer-hover:text-amber-500">
+    //     Hello
+    //   </span>
+    //   <input type="submit" value="Login" className="bg-white" />
+    // </form>
 
     // 첫번째 css.
     // <div className="grid min-h-screen gap-10 bg-slate-400 py-20 px-20">
