@@ -4,7 +4,7 @@ const Home: NextPage = () => {
   return (
     <div className="grid min-h-screen gap-10 bg-slate-400 py-20 px-20">
       {/* 1st box */}
-      <div className=" rounded-3xl bg-white p-6 shadow-xl ">
+      <div className="rounded-3xl bg-white p-6 shadow-xl sm:bg-red-400 sm:hover:bg-red-800 md:bg-teal-400  lg:bg-indigo-400 xl:bg-yellow-400 2xl:bg-pink-500">
         <span className="text-3xl font-semibold">Select Item</span>
         <ul>
           {[1, 2].map((i) => (
