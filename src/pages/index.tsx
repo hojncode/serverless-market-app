@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 const Home: NextPage = () => {
   return (
     <div className="grid min-h-screen gap-10 bg-slate-400 py-20 px-20">
+      {/* 1st box */}
       <div className=" rounded-3xl bg-white p-6 shadow-xl ">
         <span className="text-3xl font-semibold">Select Item</span>
         <ul>
@@ -31,7 +32,8 @@ const Home: NextPage = () => {
           Checkout
         </button>
       </div>
-      <div className="overflow-hidden rounded-3xl bg-white shadow-2xl">
+      {/* //2nd box */}
+      <div className="group overflow-hidden rounded-3xl bg-white shadow-2xl">
         <div className="bg-blue-500 p-6 pb-14">
           <span className="text-2xl text-white">Profile</span>
         </div>
@@ -41,7 +43,8 @@ const Home: NextPage = () => {
               <span className="text-sm text-gray-500">Orders</span>
               <span className="font-medium">340</span>
             </div>
-            <div className="h-24 w-24 rounded-full bg-red-400" />
+            {/* //photo */}
+            <div className="h-24 w-24 rounded-full bg-zinc-400 transition-colors group-hover:bg-red-300" />
             <div className="flex flex-col items-center">
               <span className="text-sm text-gray-500">Spent</span>
               <span className="font-medium">$340</span>
@@ -49,11 +52,11 @@ const Home: NextPage = () => {
           </div>
         </div>
         <div className="relative -top-16 -mt-10 -mb-5 flex flex-col items-center">
-          <span className="text-lg font-medium">Tony Molloy</span>
+          <span className="text-lg font-medium">Hony Molloy</span>
           <span className="text-sm text-gray-500">미국</span>
         </div>
       </div>
-      <div className="rounded-3xl bg-white p-10 shadow-2xl"></div>
+      {/* 3rd box */}
       <div className="rounded-3xl bg-white p-10 shadow-2xl">
         <div className="mb-5 flex items-center justify-between">
           <span>⬅️</span>
