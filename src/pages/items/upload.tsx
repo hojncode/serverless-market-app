@@ -2,9 +2,9 @@ import type { NextPage } from "next";
 
 const Upload: NextPage = () => {
   return (
-    <div>
+    <div className="px-4 py-16">
       <div>
-        <div>
+        <div className="flex w-full items-center justify-center">
           <label>
             <svg
               className="h-12 w-12"
@@ -21,7 +21,7 @@ const Upload: NextPage = () => {
               />
             </svg>
 
-            <input type="file" />
+            <input className="hidden" type="file" />
           </label>
         </div>
       </div>
