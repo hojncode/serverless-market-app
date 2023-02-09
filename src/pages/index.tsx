@@ -1,14 +1,14 @@
-import Layout from "@/component/Layout";
+import Layout from "../components/layout";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   return (
     <Layout hasTabBar title="홈">
-      <div className="flex flex-col space-y-5  py-10">
+      <div className="flex flex-col space-y-5 divide-y ">
         {[...Array(10)].map((_, i) => (
           <div
             key={i}
-            className="flex cursor-pointer justify-between border-b px-4 pb-4"
+            className="flex cursor-pointer justify-between px-5 pt-5"
           >
             <div className="flex space-x-4">
               <div className="h-20 w-20 rounded-md bg-gray-400" />
