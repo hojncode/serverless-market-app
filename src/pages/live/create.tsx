@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 
 const Create: NextPage = () => {
   return (
-    <div className="space-y-5 py-10 px-10">
+    <div className=" space-y-5 py-10 px-4">
       <div>
         <label
           className="mb-1 block text-sm font-medium text-gray-700"
