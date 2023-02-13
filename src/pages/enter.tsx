@@ -12,7 +12,6 @@ interface EnterForm {
 
 export default function Enter() {
   const [enter, { loading, data, error }] = useMutation("/api/users/enter");
-  const [submitting, setSubmitting] = useState(false);
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
 
@@ -26,7 +25,7 @@ export default function Enter() {
   };
 
   const onValid = (onValidForm: EnterForm) => {
-    setSubmitting(true);
+    if (loading) return;
     enter(onValidForm);
     // fetch("/api/users/enter", {
     //   method: "POST",
@@ -105,9 +104,11 @@ export default function Enter() {
               required
             />
           ) : null}
-          {method === "email" ? <Button text={"Get login link"} /> : null}
+          {method === "email" ? (
+            <Button text={loading ? "Loading..." : "Get login link"} />
+          ) : null}
           {method === "phone" ? (
-            <Button text={submitting ? "Loading" : "Get one-time password"} />
+            <Button text={loading ? "Loading" : "Get one-time password"} />
           ) : null}
         </form>
 
