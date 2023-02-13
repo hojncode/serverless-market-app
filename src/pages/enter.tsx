@@ -10,6 +10,7 @@ interface EnterForm {
 }
 
 export default function Enter() {
+  const [submitting, setSubmitting] = useState(false);
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
 
@@ -23,7 +24,16 @@ export default function Enter() {
   };
 
   const onValid = (data: EnterForm) => {
-    console.log(data);
+    setSubmitting(true);
+    fetch("/api/users/enter", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => {
+      setSubmitting(false);
+    });
   };
 
   // console.log(watch());
@@ -94,7 +104,7 @@ export default function Enter() {
           ) : null}
           {method === "email" ? <Button text={"Get login link"} /> : null}
           {method === "phone" ? (
-            <Button text={"Get one-time password"} />
+            <Button text={submitting ? "Loading" : "Get one-time password"} />
           ) : null}
         </form>
 
