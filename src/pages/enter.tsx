@@ -1,6 +1,6 @@
 import Button from "@/components/button";
 import Input from "@/components/input";
-import { cls } from "@/libs/utils";
+import { cls } from "@/libs/client/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -10,6 +10,7 @@ interface EnterForm {
 }
 
 export default function Enter() {
+  const [] = useMutation();
   const [submitting, setSubmitting] = useState(false);
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
