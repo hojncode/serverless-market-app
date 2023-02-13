@@ -1,15 +1,32 @@
+import { type } from "os";
 import { useState } from "react";
 
-export default function useMutation(
-  url: string
-): [
-  (data: any) => void,
-  { loading: boolean; data: undefined | any; error: undefined | any }
-] {
+interface UseMutationState {
+  loading: boolean;
+  data?: object;
+  error?: object;
+}
+
+type UseMutationResult = [(data: any) => void, UseMutationState];
+
+export default function useMutation(url: string): UseMutationResult {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<undefined | any>(undefined);
   const [error, setError] = useState<undefined | any>(undefined);
 
-  function mutation(data: any) {}
+  function mutation(data: any) {
+    setLoading(true);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json().catch(() => {})) // response 에 에러가 없으면 catch의 에러는 보이지 않는다.
+      .then(setData) // .then((json)=> setData(json)) 과 같음 (축약)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }
   return [mutation, { loading, data, error }];
 }
