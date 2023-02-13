@@ -1,4 +1,4 @@
-import client from "@/libs/client";
+import client from "@/libs/server/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
