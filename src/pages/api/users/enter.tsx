@@ -2,8 +2,10 @@ import client from "@/libs/server/client";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
+import mail from "@sendgrid/mail";
 
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+mail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 async function handler(
   req: NextApiRequest, //!!!!! req 의 인코딩 기준으로 인코딩 된다. 많은 next.js 개발자들이 놓치는 부분이다.
@@ -133,6 +135,15 @@ async function handler(
       body: `Your login token is ${payload}`,
     });
     console.log("TWILIO!!", message);
+  } else if (email) {
+    const email = await mail.send({
+      from: "glicm12@gmail.com",
+      to: "glicm12@gmail.com",
+      subject: "Your Carrot Market Verification Email",
+      text: `Your token is ${payload}`,
+      html: `<strong>Your token is ${payload}</strong>`,
+    });
+    console.log("SENDGRID!!", email);
   }
 
   console.log("req", req.body); // FrontEnd 에서 (여기서 enter.jsx) headers를 추가 해주어야 .email 을 BackEnd 에서 받을 수 있다.(headers 입력 안할 시, req.body 까지만 백에서 받을 수 있다)
