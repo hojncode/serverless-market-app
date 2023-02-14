@@ -6,17 +6,29 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma" // prisma 가 foreign key constraint 참조 무결성 원칙을 수행 해줌. 이전 prisam 버젼은 referentialIntegrity 구문이었지만 현재 버젼에서 이 코드로 변경됨. 
 }
 
 model User {
-  id        Int @id @default(autoincrement())
-  phone     Int? @unique
-  email     String? @unique
+  id        Int      @id @default(autoincrement())
+  phone     Int?     @unique
+  email     String?  @unique
   name      String
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  }
+  tokens    Token[]
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  payload   String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
+}
