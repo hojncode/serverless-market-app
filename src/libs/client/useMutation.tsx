@@ -31,8 +31,10 @@ export default function useMutation<T = any>(
       body: JSON.stringify(data),
     })
       .then((response) => response.json().catch(() => {})) // response 에 에러가 없으면 catch의 에러는 보이지 않는다.
-      .then((data) => setState((prev) => ({ ...prev, data }))) // .then((json)=> setData(json)) 과 같음 (축약)
-      .catch((error) => setState((prev) => ({ ...prev, error })))
+      .then((data) => setState((prev) => ({ ...prev, data, loading: false }))) // .then((json)=> setData(json)) 과 같음 (축약)
+      .catch((error) =>
+        setState((prev) => ({ ...prev, error, loading: false }))
+      )
       .finally(() => setState((prev) => ({ ...prev, loading: false })));
   }
   return [mutation, { ...state }];
