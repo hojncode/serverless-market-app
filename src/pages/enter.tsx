@@ -2,7 +2,8 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface EnterForm {
@@ -10,9 +11,22 @@ interface EnterForm {
   phone?: string;
 }
 
+interface TokenForm {
+  token: string;
+}
+
+interface MutationResult {
+  ok: boolean;
+}
+
 export default function Enter() {
-  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
+  const [enter, { loading, data, error }] =
+    useMutation<MutationResult>("/api/users/enter");
+  const [confirmToken, { loading: tokenLoading, data: tokenData }] =
+    useMutation<MutationResult>("/api/users/confirm");
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
+  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
+    useForm<TokenForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
 
   const onEmailClick = () => {
@@ -38,79 +52,117 @@ export default function Enter() {
     // });
   };
 
-  console.log(loading, data, error);
+  const onTokenValid = (validForm: TokenForm) => {
+    if (tokenLoading) return;
+    confirmToken(validForm);
+    console.log("validForm!!", validForm);
+  };
+  /** useRouter */
+  const router = useRouter();
+  /** useEffect */
+  useEffect(() => {
+    if (tokenData?.ok) {
+      router.push("/");
+    }
+  }, [tokenData, router]);
 
+  // console.log(loading, data, error);
+  // console.log("datatatata", data);
   return (
     <div className="mt-16 px-4">
       <h3 className="text-center text-3xl font-bold">Enter to Carrot</h3>
       <div className="mt-8">
-        <div className="flex flex-col items-center">
-          <h5 className="text-sm font-medium text-gray-500">Enter using:</h5>
-          <div className="mt-8 grid w-full grid-cols-2 gap-16 border-b">
-            <button
-              className={cls(
-                "border-b-2 pb-4 font-medium",
-                method === "email"
-                  ? "  border-orange-500 text-orange-400"
-                  : "border-transparent text-gray-500"
-              )}
-              // 위에 처럼 클래스 명을 join 을 이용해서 깔끔하게 입력할 수 있다.
-              //   className={` "pb-4 font-medium" ${
-              //     method === "email"
-              //       ? "border-b-2  border-orange-500 text-orange-400"
-              //       : ""
-              //   }`}
-
-              onClick={onEmailClick}
-            >
-              Email address
-            </button>
-            <button
-              className={cls(
-                "border-b-2 pb-4 font-medium",
-                method === "phone"
-                  ? "  border-orange-500 text-orange-400"
-                  : "border-transparent text-gray-500"
-              )}
-              onClick={onPhoneClick}
-            >
-              Phone number
-            </button>
-          </div>
-        </div>
-        {/* form */}
-        <form
-          onSubmit={handleSubmit(onValid)}
-          className="mt-8 flex flex-col space-y-4"
-        >
-          {method === "email" ? (
+        {data?.ok ? (
+          <form
+            onSubmit={tokenHandleSubmit(onTokenValid)}
+            className="mt-8 flex flex-col space-y-4"
+          >
             <Input
-              register={register("email", {
+              register={tokenRegister("token", {
                 required: true,
               })} // 여기에 이것을 추가할 수 있는 이유는, Input 컴포넌트에 `[key: string]: any;` 을 넣어주었기에 가능하다.
-              name="email"
-              label="Email address"
-              type="email"
-              required
-            />
-          ) : null}
-          {method === "phone" ? (
-            <Input
-              register={register("phone")}
-              name="phone"
-              label="Phone number"
+              name="token"
+              label="Confirmation Token"
               type="number"
-              kind="phone"
               required
             />
-          ) : null}
-          {method === "email" ? (
-            <Button text={loading ? "Loading..." : "Get login link"} />
-          ) : null}
-          {method === "phone" ? (
-            <Button text={loading ? "Loading" : "Get one-time password"} />
-          ) : null}
-        </form>
+
+            <Button text={loading ? "Loading" : "Confirm Token"} />
+          </form>
+        ) : (
+          <>
+            {/* div */}
+            <div className="flex flex-col items-center">
+              <h5 className="text-sm font-medium text-gray-500">
+                Enter using:
+              </h5>
+              <div className="mt-8 grid w-full grid-cols-2 gap-16 border-b">
+                <button
+                  className={cls(
+                    "border-b-2 pb-4 font-medium",
+                    method === "email"
+                      ? "  border-orange-500 text-orange-400"
+                      : "border-transparent text-gray-500"
+                  )}
+                  // 위에 처럼 클래스 명을 join 을 이용해서 깔끔하게 입력할 수 있다.
+                  //   className={` "pb-4 font-medium" ${
+                  //     method === "email"
+                  //       ? "border-b-2  border-orange-500 text-orange-400"
+                  //       : ""
+                  //   }`}
+
+                  onClick={onEmailClick}
+                >
+                  Email address
+                </button>
+                <button
+                  className={cls(
+                    "border-b-2 pb-4 font-medium",
+                    method === "phone"
+                      ? "  border-orange-500 text-orange-400"
+                      : "border-transparent text-gray-500"
+                  )}
+                  onClick={onPhoneClick}
+                >
+                  Phone number
+                </button>
+              </div>
+            </div>
+            {/* form */}
+            <form
+              onSubmit={handleSubmit(onValid)}
+              className="mt-8 flex flex-col space-y-4"
+            >
+              {method === "email" ? (
+                <Input
+                  register={register("email", {
+                    required: true,
+                  })} // 여기에 이것을 추가할 수 있는 이유는, Input 컴포넌트에 `[key: string]: any;` 을 넣어주었기에 가능하다.
+                  name="email"
+                  label="Email address"
+                  type="email"
+                  required
+                />
+              ) : null}
+              {method === "phone" ? (
+                <Input
+                  register={register("phone")}
+                  name="phone"
+                  label="Phone number"
+                  type="number"
+                  kind="phone"
+                  required
+                />
+              ) : null}
+              {method === "email" ? (
+                <Button text={loading ? "Loading..." : "Get login link"} />
+              ) : null}
+              {method === "phone" ? (
+                <Button text={loading ? "Loading" : "Get one-time password"} />
+              ) : null}
+            </form>
+          </>
+        )}
 
         <div className="mt-8">
           <div className="relative">
