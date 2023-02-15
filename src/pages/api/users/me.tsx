@@ -15,25 +15,25 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  // console.log("req.session!!", req.session);
-  const { token } = req.body;
-  console.log("token!!", token);
-  const exists = await client.token.findUnique({
-    where: {
-      payload: token,
-    },
-    // include: { user: true },
+  console.log(req.session.user);
+  //   const profile = JSON.stringify(
+  //     await client.user.findUnique({
+  //       where: { id: req.session.user?.id },
+  //     })
+  //   );
+  //   console.log(profile);
+  //   //   res.status(200).end();
+
+  //   const updatedData = JSON.stringify(profile, (_key, value) => {
+  //     typeof value === "bigint" ? (value = value.toString()) : value.toString();
+  //   });
+
+  res.json({
+    ok: true,
   });
-  if (!exists) return res.status(404).end();
-  // console.log("exists!!", exists);
-  req.session.user = {
-    id: exists.userId,
-  };
-  await req.session.save();
-  res.status(200).end();
 }
 
-export default withIronSessionApiRoute(withHandler("POST", handler), {
+export default withIronSessionApiRoute(withHandler("GET", handler), {
   cookieName: "carrotsession",
   password: "0980008801230323122301fdfefafsdafsafsadfs",
 }); // 첫번째 인자에 들어가는 값에따라 , 두번째 인자에 들어가는 함수에서 설정한 값의 페이지로 이동시킬 수 있다. (여기서는 , handler 에서 요청이 Post 이면 api/user/enter 접속시에 405 에러 페이지로 보내도록 설정함)
