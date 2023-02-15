@@ -14,7 +14,7 @@ async function handler(
   const { phone, email } = req.body; //? phone 에 Int 최댓값(2147483647)보다 크게 입력하면 오류가 발생한다.
 
   /**방법 3. payload 로 정리. */
-  const user = phone ? { phone: +phone } : email ? { email } : null;
+  const user = phone ? { phone } : email ? { email } : null;
   if (!user) return res.status(400).json({ ok: false });
   const payload = Math.floor(100000 + Math.random() * 900000) + ""; // "" String 형.
   // const user = await client.user.upsert({
