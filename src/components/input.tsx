@@ -8,6 +8,7 @@ interface InputProps {
   // [key: string]: any; // 어떤 prop 이든 보낼 수 있게 해준다.
   register: UseFormRegisterReturn;
   required: boolean;
+  placeholder?: string;
 }
 
 export default function Input({
@@ -15,6 +16,7 @@ export default function Input({
   name,
   kind = "text",
   register,
+  placeholder,
   type,
   required,
   ...rest
