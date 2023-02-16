@@ -1,0 +1,7 @@
+{
+  "window.zoomLevel": 1.5,
+  "editor.mouseWheelZoom": true,
+  "editor.scrollbar.horizontalScrollbarSize": 20,
+  "editor.scrollbar.scrollByPage": true,
+  "editor.scrollbar.horizontal": "auto"
+}
