@@ -6,7 +6,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig
       value={{
-        refreshInterval: 1500,
+        refreshInterval: 1000 * 60, // 설정값을 통해 데이터를 리로딩 할 수 있다.
         fetcher: (url: string) =>
           fetch(url).then((response) => response.json()),
       }}
