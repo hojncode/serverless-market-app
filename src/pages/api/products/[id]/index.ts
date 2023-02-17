@@ -8,7 +8,10 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   console.log("(/api/products/[id])!!!", req.query); // 프론트에 router.query가 있는것처럼 , 여기 백에도 req.query 가 있다.
-  const { id } = req.query;
+  const {
+    query: { id },
+    session: { user },
+  } = req;
   const product = await client.product.findUnique({
     where: {
       id: Number(id), // +id.toString() 으로 하면 타입 undefined로 오류가 나온다.
@@ -42,8 +45,22 @@ async function handler(
   });
   console.log("relatedProducts!!!", relatedProducts);
   // console.log("product!!!", product);
-  res.json({ ok: true, product, relatedProducts });
+
+  const isLiked = Boolean(
+    await client.fav.findFirst({
+      where: {
+        productId: product?.id,
+        userId: user?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
+
+  res.json({ ok: true, product, isLiked, relatedProducts });
 }
+
 export default withApiSession(
   withHandler({
     method: ["GET"],
