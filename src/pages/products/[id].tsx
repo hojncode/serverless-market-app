@@ -31,11 +31,11 @@ const ItemDetail: NextPage = () => {
   const onFavClick = () => {
     if (!data) return;
     boundMutate((prev) => prev && { ...prev, isLiked: !prev.isLiked }, false);
-    /*{Unbound Mutations 주석처리.}*/ mutate(
-      "/api/users/me",
-      (prev: any) => ({ ok: !prev.ok }),
-      false
-    );
+    // /*{Unbound Mutations 주석처리.}*/ mutate(
+    //   "/api/users/me",
+    //   (prev: any) => ({ ok: !prev.ok }),
+    //   false
+    // ); // (prev: any) => ({ ok: !prev.ok }), 를 지우면 단순히 refetch 되고, (안지우면 unbound mutate 가 된다 - 데이터가 변경됨)
     toggleFav({});
   };
   console.log("data!!!", data);
