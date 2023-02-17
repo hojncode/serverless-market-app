@@ -33,9 +33,9 @@ export default function withHandler({
     }
     try {
       await handler(req, res);
-      console.log("hahahahah: this message is from `withHandler.tsx`");
+      // console.log("hahahahah: this message is from `withHandler.tsx`");
     } catch (error) {
-      console.log("catch-error", error);
+      // console.log("catch-error", error);
       return res.status(500).json({ error: "catch error" });
     }
   };

@@ -25,8 +25,24 @@ async function handler(
       },
     },
   });
-  console.log("product!!!", product);
-  res.json({ ok: true, product });
+  const terms = product?.name.split(" ").map((word) => ({
+    name: {
+      contains: word,
+    },
+  })); // "" 사이에 들어있는 것을 기준으로 분리함.
+  const relatedProducts = await client.product.findMany({
+    where: {
+      OR: terms,
+      AND: {
+        id: {
+          not: product?.id,
+        },
+      },
+    },
+  });
+  console.log("relatedProducts!!!", relatedProducts);
+  // console.log("product!!!", product);
+  res.json({ ok: true, product, relatedProducts });
 }
 export default withApiSession(
   withHandler({
