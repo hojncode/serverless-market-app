@@ -1,3 +1,4 @@
+import { AnyARecord } from "dns";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export interface ResponseType {
@@ -5,8 +6,9 @@ export interface ResponseType {
   [key: string]: any;
 }
 
+type method = "GET" | "POST" | "DELETE";
 interface ConfigType {
-  method: "GET" | "POST" | "DELETE";
+  method: method[];
   handler: (req: NextApiRequest, res: NextApiResponse) => void;
   isPrivate?: boolean;
 }
@@ -21,7 +23,7 @@ export default function withHandler({
     res: NextApiResponse
   ): Promise<any> /** { : Promise<any> } "confirm.tsx 의 withHandler("POST", handler) 가 에러 날 경우 넣어 줄것." */ {
     // res.json({ hello: true });
-    if (req.method !== method) {
+    if (req.method && !method.includes(req.method as any)) {
       return res.status(405).end();
     }
     if (isPrivate && !req.session.user) {
@@ -31,9 +33,9 @@ export default function withHandler({
     }
     try {
       await handler(req, res);
-      console.log("hahahahah: this message is from `withHandler.tsx`");
+      // console.log("hahahahah: this message is from `withHandler.tsx`");
     } catch (error) {
-      console.log("catch-error", error);
+      // console.log("catch-error", error);
       return res.status(500).json({ error: "catch error" });
     }
   };
