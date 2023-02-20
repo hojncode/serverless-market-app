@@ -23,6 +23,8 @@ model User {
   products  Product[]
   fav       Fav[]
   posts     Post[]
+  answers   Answer[]
+  wonderings wondering[]
 }
 
 model Token {
@@ -71,7 +73,35 @@ model Post {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   question    String   @db.MediumText // db에서 String의 길이 제한 MediumText 으로 설정.
+  answers     Answer[]
+  wondering   wondering[]
 
   @@index([userId]) 
 }
 
+model Answer {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      Int
+
+  @@index([userId]) 
+  @@index([postId]) 
+}
+
+model wondering {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      Int
+
+  @@index([userId]) 
+  @@index([postId]) 
+
+}
