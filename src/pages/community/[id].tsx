@@ -102,7 +102,7 @@ const CommunityPostDetail: NextPage = () => {
                   {answer.user.name}
                 </span>
                 <span className="block text-xs text-gray-500 ">
-                  {answer.createdAt}
+                {answer.createdAt}  {/** 원래 Date 이지만, 현재 프로젝트상에서 오류가 나와서 number타입으로 임시 수정해놓음.*/} 
                 </span>
                 <p className="mt-2 text-gray-700">{answer.answer}</p>
               </div>
