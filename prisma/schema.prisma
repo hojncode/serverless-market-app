@@ -73,6 +73,8 @@ model Post {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   question    String   @db.MediumText // db에서 String의 길이 제한 MediumText 으로 설정.
+  latitude    Float?
+  longitude   Float?
   answers     Answer[]
   wondering   wondering[]
 

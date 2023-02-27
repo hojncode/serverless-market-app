@@ -8,13 +8,15 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const {
-    body: { question },
+    body: { question, latitude, longitude }, // body에서 해당 값들을 꺼내온다는 개념.
     session: { user },
   } = req;
   if (req.method === "POST") {
     const post = await client.post.create({
       data: {
         question,
+        latitude,
+        longitude,
         user: {
           connect: {
             id: user?.id,
