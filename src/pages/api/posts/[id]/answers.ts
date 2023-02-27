@@ -15,7 +15,6 @@ async function handler(
   } = req;
   console.log("req!!!");
 
-  // if(!post) :::::이 구문을 만들어줘서 post 의 존재가 없으면 에러페이지를 띄워줘야한다(유저를 믿지마라...)
   const newAnswer = await client.answer.create({
     data: {
       user: {

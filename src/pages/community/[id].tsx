@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
+//TypeScript
 interface AnswerWithUser extends Answer {
   user: User;
 }
@@ -37,19 +38,24 @@ interface AnswerResponse {
   response: Answer; // prisma 테이블 가져온것임.
 }
 
+//Page
 const CommunityPostDetail: NextPage = () => {
+  //functions
   const router = useRouter();
   const { handleSubmit, register, reset } = useForm<AnswerForm>();
   const { data, mutate } = useSWR<CommunityPostResponse>(
     router.query.id ? `/api/posts/${router.query.id}` : null
   );
   // console.log("CONSOLE!!!", data);
+
   const [wonder, { loading }] = useMutation(
     `/api/posts/${router.query.id}/wonder`
   );
   // console.log("wonder!!!", wonder);
+
   const [sendAnswer, { data: answerData, loading: answerLoading }] =
     useMutation<AnswerResponse>(`/api/posts/${router.query.id}/answers`);
+
   const onWonderClick = () => {
     console.log("onWonderClick!!");
     if (!data) return;
@@ -88,7 +94,8 @@ const CommunityPostDetail: NextPage = () => {
       mutate();
     }
   }, [answerData, reset, mutate]);
-  // useEffect(() => {
+
+  //FIXME: useEffect(() => {
   //   if (data?.isWondering === true) {
   //     // router.replace("/enter");
   //     console.log(data?.isWondering);
@@ -96,6 +103,7 @@ const CommunityPostDetail: NextPage = () => {
   //     router.replace("/enter");
   //   }
   // }, [data, router]);
+
   return (
     <Layout canGoBack>
       <div>
