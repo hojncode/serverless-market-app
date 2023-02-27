@@ -6,6 +6,8 @@ import { Answer, Post, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
 interface AnswerWithUser extends Answer {
@@ -26,14 +28,28 @@ interface CommunityPostResponse {
   isWondering: boolean;
 }
 
+interface AnswerForm {
+  answer: string;
+}
+
+interface AnswerResponse {
+  ok: boolean;
+  response: Answer; // prisma 테이블 가져온것임.
+}
+
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
+  const { handleSubmit, register, reset } = useForm<AnswerForm>();
   const { data, mutate } = useSWR<CommunityPostResponse>(
     router.query.id ? `/api/posts/${router.query.id}` : null
   );
-  console.log("CONSOLE!!!", data);
-  const [wonder] = useMutation(`/api/posts/${router.query.id}/wonder`);
-  console.log("wonder!!!", wonder);
+  // console.log("CONSOLE!!!", data);
+  const [wonder, { loading }] = useMutation(
+    `/api/posts/${router.query.id}/wonder`
+  );
+  // console.log("wonder!!!", wonder);
+  const [sendAnswer, { data: answerData, loading: answerLoading }] =
+    useMutation<AnswerResponse>(`/api/posts/${router.query.id}/answers`);
   const onWonderClick = () => {
     console.log("onWonderClick!!");
     if (!data) return;
@@ -53,8 +69,25 @@ const CommunityPostDetail: NextPage = () => {
       },
       false
     );
-    wonder({}); // 실제 백엔드로 `궁금해요`버튼을 눌렀을때의 변경사항을 보낸다.
+
+    if (!loading) {
+      //! 로딩이 아닐때만 wonder를 통해 백엔드로 데이터를 보내기 때문에, 경쟁 상태 (race condition) 문제를 방지할 수 있다.
+      wonder({}); // 실제 백엔드로 `궁금해요`버튼을 눌렀을때의 변경사항을 보낸다.
+    }
   };
+
+  const onValid = (form: AnswerForm) => {
+    console.log("onValid!!!", form);
+    if (answerLoading) return;
+    sendAnswer(form);
+  };
+
+  useEffect(() => {
+    if (answerData && answerData.ok) {
+      reset();
+    }
+  }, [answerData, reset]);
+
   return (
     <Layout canGoBack>
       <div>
@@ -134,7 +167,7 @@ const CommunityPostDetail: NextPage = () => {
                   {answer.user.name}
                 </span>
                 <span className="block text-xs text-gray-500 ">
-                  {answer.createdAt}
+                  {String(answer.createdAt)}
                   {/** 원래 Date 이지만, 현재 프로젝트상에서 오류가 나와서 number타입으로 임시 수정해놓음.*/}
                 </span>
                 <p className="mt-2 text-gray-700">{answer.answer}</p>
@@ -142,16 +175,17 @@ const CommunityPostDetail: NextPage = () => {
             </div>
           ))}
         </div>
-        <div className="px-4">
+        <form className="px-4" onSubmit={handleSubmit(onValid)}>
           <TextArea
             name="description"
             placeholder="Answer this question!"
             required
+            register={register("answer", { required: true, minLength: 5 })}
           />
           <button className="mt-2 w-full rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 ">
-            Reply
+            {answerLoading ? "Loading..." : "Reply"}
           </button>
-        </div>
+        </form>
       </div>
     </Layout>
   );
