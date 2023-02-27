@@ -87,7 +87,14 @@ const CommunityPostDetail: NextPage = () => {
       reset();
     }
   }, [answerData, reset]);
-
+  // useEffect(() => {
+  //   if (data?.isWondering === true) {
+  //     // router.replace("/enter");
+  //     console.log(data?.isWondering);
+  //   } else {
+  //     router.replace("/enter");
+  //   }
+  // }, [data, router]);
   return (
     <Layout canGoBack>
       <div>
