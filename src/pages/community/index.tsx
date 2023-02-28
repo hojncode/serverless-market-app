@@ -1,5 +1,6 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
+import useCoords from "@/libs/client/useCoords";
 import { Post, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -19,13 +20,16 @@ interface PostResponse {
 }
 
 const Community: NextPage = () => {
-  const { data } = useSWR<PostResponse>(`/api/posts`); //useSWR 은 GET 요청.
+  const { longitude, latitude } = useCoords();
+  const { data } = useSWR<PostResponse>(
+    `/api/posts?latitude=${latitude}&longitude=${longitude}`
+  ); //useSWR 은 GET 요청.
   console.log("data!!!", data);
 
   return (
     <Layout hasTabBar title="동네생활">
       <div className="space-y-4 divide-y-[2px]">
-        {data?.posts.map((post) => (
+        {data?.posts?.map((post) => (
           <Link legacyBehavior href={`/community/${post.id}`} key={post.id}>
             <a className="flex cursor-pointer flex-col items-start pt-4">
               <span className="ml-4 flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
