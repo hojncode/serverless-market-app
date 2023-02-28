@@ -22,7 +22,9 @@ interface PostResponse {
 const Community: NextPage = () => {
   const { longitude, latitude } = useCoords();
   const { data } = useSWR<PostResponse>(
-    `/api/posts?latitude=${latitude}&longitude=${longitude}`
+    latitude && longitude
+      ? `/api/posts?latitude=${latitude}&longitude=${longitude}`
+      : null
   ); //useSWR 은 GET 요청.
   console.log("data!!!", data);
 
