@@ -23,6 +23,8 @@ export default function withHandler({
     res: NextApiResponse
   ): Promise<any> /** { : Promise<any> } "confirm.tsx 의 withHandler("POST", handler) 가 에러 날 경우 넣어 줄것." */ {
     // res.json({ hello: true });
+
+    // method가 일치 하지 않을때.
     if (req.method && !method.includes(req.method as any)) {
       return res.status(405).end();
     }
