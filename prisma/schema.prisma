@@ -113,7 +113,7 @@ model Review {
   createdById       Int
   createdFor        User        @relation(name:"receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
   createdForId      Int
-
+  score             Int         @default(1)  // 이미 작성된 테이블에 튜플을 추가할 경우, 기존 타입에 ?를 추가해서 Non-required로 만들거나 / default를 추가해줄 수 있다.
   @@index([createdById])
   @@index([createdForId])
 }
