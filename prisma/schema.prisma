@@ -21,15 +21,15 @@ model User {
   updatedAt        DateTime     @updatedAt
   tokens           Token[]
   products         Product[]
-  fav              Fav[]
   posts            Post[]
   answers          Answer[]
   wonderings       wondering[]
   writtenReviews   Review[]     @relation(name:"writtenReviews")
   receivedReviews  Review[]     @relation(name:"receivedReviews")
+  fav              Fav[]
   sales            Sale[]
   purchases        Purchase[]
-  records           Record[]
+  record           Record[] //enum 사용.
 } 
 
 model Token {
@@ -56,12 +56,10 @@ model Product {
   favs             Fav[]
   sales            Sale[]
   purchases        Purchase[]
-  records          Record[]
+  record           Record[]  //enum 사용.
 
   @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
 }
-
-
 
 model Post {
   id                Int         @id @default(autoincrement())
@@ -146,6 +144,18 @@ model Purchase {
   @@index([productId])
 }
 
+model Fav {
+  id                Int         @id @default(autoincrement())
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            Int   
+  product           Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId         Int   
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
+  @@index([productId])
+}
 
 model Record {
   id                Int          @id @default(autoincrement())
@@ -161,20 +171,9 @@ model Record {
   @@index([productId])
 }  
 
-model Fav {
-  id                Int         @id @default(autoincrement())
-  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int   
-  product           Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId         Int   
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-
-  @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
-  @@index([productId])
-}
-
 // enum 사용하기 . 공통된 테이블이 있을때 중복사용을 줄일 수 있다.
+// Record 를 만들고, Kind에는 테이블명만 작성한다.
+// 그리고 참조테이블에 추가할 이름과 Record[]배열을 추가해준다.
 //https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#enum
 
 enum Kind {
