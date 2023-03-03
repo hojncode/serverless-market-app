@@ -28,6 +28,7 @@ export default function withHandler({
     if (req.method && !method.includes(req.method as any)) {
       return res.status(405).end();
     }
+    // 세션값이 false (로그인되지 않았을때)
     if (isPrivate && !req.session.user) {
       return res
         .status(401)
