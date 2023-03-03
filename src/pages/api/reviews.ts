@@ -9,18 +9,28 @@ async function handler(
 ) {
   console.log("req.session.user!!!", req.session.user);
 
-  //   if (!req.session.user) {
-  //     res.json({ ok: true });
-  //   }
+  const {
+    session: { user },
+  } = req;
 
-  const profile = await client.user.findUnique({
-    where: { id: req.session.user?.id },
+  const reviews = await client.review.findMany({
+    where: {
+      createdForId: user?.id,
+    },
+    include: {
+      createdBy: { select: { id: true, name: true, avatar: true } },
+    },
   });
-  // console.log(profile);
-  //   res.status(200).end();
+
   res.json({
     ok: true,
-    profile,
+    reviews,
   });
 }
-export default withApiSession(withHandler({ method: ["GET"], handler }));
+
+export default withApiSession(
+  withHandler({
+    method: ["GET"],
+    handler,
+  })
+);
