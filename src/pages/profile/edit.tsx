@@ -4,6 +4,7 @@ import Layout from "@/components/layout";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -20,6 +21,7 @@ interface EditProfileResponse {
 }
 
 const EditProfile: NextPage = () => {
+  const router = useRouter();
   const { user } = useUser();
   const {
     handleSubmit,
@@ -56,6 +58,12 @@ const EditProfile: NextPage = () => {
       setError("formErrors", { message: data.error });
     }
   }, [data, setError]);
+
+  useEffect(() => {
+    if (data?.ok === true) {
+      router.push(`/profile`);
+    }
+  }, [data, router]);
 
   return (
     <Layout canGoBack title="Edit Profile">
