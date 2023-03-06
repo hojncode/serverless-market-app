@@ -47,7 +47,7 @@ const Create: NextPage = () => {
           type="text"
         />
         <Input
-          register={register("price", { required: true })}
+          register={register("price", { required: true, valueAsNumber: true })} //form에서는 기본적으로 텍스트를 입력 받기 때문에 모두 `string`타입이기 때문에 스키마에서 오류가 날 수 있다. valueAsNumber를 사용해서 숫자형 타입으로 바꿔준다.
           required
           label="Price"
           placeholder="0.00"

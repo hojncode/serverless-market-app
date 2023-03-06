@@ -1,18 +1,32 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
+import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
+import Link from "next/link";
+import useSWR from "swr";
 
-const Live: NextPage = () => {
+interface StreamsResponse {
+  ok: boolean;
+  streams: Stream[];
+}
+
+const Streams: NextPage = () => {
+  const { data } = useSWR<StreamsResponse>(`/api/streams`);
+  console.log("data!!!!!!!!!", data);
   return (
     <Layout hasTabBar title="라이브">
       <div className="space-y-4 divide-y-[1px]">
-        {[...Array(5)].map((_, i) => (
-          <div className="px-4 pt-4" key={i}>
-            <div className="aspect-video w-full rounded-md bg-slate-300 shadow-md" />
-            <h1 className="mt-2 text-2xl font-bold text-gray-900">iphone</h1>
-          </div>
+        {data?.streams?.map((stream) => (
+          <Link legacyBehavior key={stream.id} href={`/streams/${stream.id}`}>
+            <a className="px-4 pt-4">
+              <div className="aspect-video w-full rounded-md bg-slate-300 shadow-md" />
+              <h1 className="mt-2 text-2xl font-bold text-gray-900">
+                {stream.name}
+              </h1>
+            </a>
+          </Link>
         ))}
-        <FloatingButton href="/live/create">
+        <FloatingButton href="/streams/create">
           <svg
             className="h-6 w-6"
             fill="none"
@@ -33,4 +47,4 @@ const Live: NextPage = () => {
   );
 };
 
-export default Live;
+export default Streams;
