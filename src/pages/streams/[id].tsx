@@ -5,7 +5,7 @@ import useUser from "@/libs/client/useUser";
 import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
@@ -30,6 +30,7 @@ interface MessageForm {
 }
 
 const StreamS: NextPage = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<MessageForm>();
@@ -51,6 +52,9 @@ const StreamS: NextPage = () => {
     }
   }, [sendMessageData, mutate]);
 
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView();
+  });
   return (
     <Layout canGoBack>
       <div className="space-y-4 py-10  px-4">
@@ -77,6 +81,7 @@ const StreamS: NextPage = () => {
                 reversed={message.user.id === user?.id} // user?.id는 useUser에서 오는 것.message.user.id가 현재 내가 작성한 메세지의 내 아이디값이기 때문에 따라서 내가 쓴 메세지는 화면 오른쪽에 붙는다.
               />
             ))}
+            <div ref={scrollRef} />
           </div>
           <div className="fixed inset-x-0 bottom-0  bg-white py-2">
             <form
