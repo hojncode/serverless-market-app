@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { Stream } from "./../../../../node_modules/.prisma/client/index.d";
+import { Stream } from ".prisma/client";
 import client from "@/libs/server/client";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -15,6 +15,20 @@ async function handler(
   const stream = await client.stream.findUnique({
     where: {
       id: Number(id),
+    },
+    include: {
+      messages: {
+        select: {
+          id:true,
+          message: true,
+          user: {
+            select: {
+              avatar: true,
+              id: true,
+            }
+          }
+        }
+      }
     },
   });
 

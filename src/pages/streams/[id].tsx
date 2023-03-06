@@ -1,25 +1,39 @@
 import Layout from "@/components/layout";
 import Message from "@/components/message";
 import useMutation from "@/libs/client/useMutation";
+import useUser from "@/libs/client/useUser";
 import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
+interface StreamMessage {
+  message: string;
+  id: number;
+  user: {
+    avatar?: string;
+    id: number;
+  };
+}
+interface StreamWithMessages extends Stream {
+  messages: StreamMessage[];
+}
 interface StreamResponse {
   ok: true;
-  stream: Stream;
+  stream: StreamWithMessages;
 }
 
 interface MessageForm {
   message: string;
 }
 
-const Stream: NextPage = () => {
+const StreamS: NextPage = () => {
+  const { user } = useUser();
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<MessageForm>();
-  const { data } = useSWR<StreamResponse>(
+  const { data, mutate } = useSWR<StreamResponse>(
     router.query.id ? `/api/streams/${router.query.id}` : null
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
@@ -30,6 +44,13 @@ const Stream: NextPage = () => {
     reset();
     sendMessage(form);
   };
+
+  useEffect(() => {
+    if (sendMessageData && sendMessageData.ok) {
+      mutate();
+    }
+  }, [sendMessageData, mutate]);
+
   return (
     <Layout canGoBack>
       <div className="space-y-4 py-10  px-4">
@@ -46,9 +67,16 @@ const Stream: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Live Chat</h2>
           <div className="h-[50vh] space-y-4 overflow-y-scroll py-10  px-4 pb-16">
-            <Message message="Hi how much are you selling them for?" />
+            {/* <Message message="Hi how much are you selling them for?" />
             <Message message="I want ￦20,000" reversed />
-            <Message message="미쳤어" />
+            <Message message="미쳤어" /> */}
+            {data?.stream.messages.map((message) => (
+              <Message
+                key={message.id}
+                message={message.message}
+                reversed={message.user.id === user?.id} // user?.id는 useUser에서 오는 것.message.user.id가 현재 내가 작성한 메세지의 내 아이디값이기 때문에 따라서 내가 쓴 메세지는 화면 오른쪽에 붙는다.
+              />
+            ))}
           </div>
           <div className="fixed inset-x-0 bottom-0  bg-white py-2">
             <form
@@ -73,7 +101,7 @@ const Stream: NextPage = () => {
   );
 };
 
-export default Stream;
+export default StreamS;
 
 // legacy ===
 // import type { NextPage } from "next";
