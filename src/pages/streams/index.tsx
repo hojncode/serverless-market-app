@@ -18,7 +18,7 @@ const Streams: NextPage = () => {
       <div className="space-y-4 divide-y-[1px]">
         {data?.streams?.map((stream) => (
           <Link legacyBehavior key={stream.id} href={`/streams/${stream.id}`}>
-            <a className="px-4 pt-4">
+            <a className="border-none px-4 pt-4">
               <div className="aspect-video w-full rounded-md bg-slate-300 shadow-md" />
               <h1 className="mt-2 text-2xl font-bold text-gray-900">
                 {stream.name}
