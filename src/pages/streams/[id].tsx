@@ -38,6 +38,7 @@ const StreamS: NextPage = () => {
     router.query.id ? `/api/streams/${router.query.id}` : null,
     {
       refreshInterval: 1000, // 현재 상태에서는 serverless와 next.js만 사용중이기때문에 실시간 채팅이 아니다 따라서, refreshInterval를 추가하여 1초마다 갱신되는 데이터값을 가져와서 실시간 처럼 보이게한다.
+      revalidateOnFocus: false, // 이 페이지에서만 refreshInterval가 동작시킴.
     }
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(

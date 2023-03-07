@@ -24,6 +24,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.1",
     "swr": "^2.0.3",
+    "ts-node": "^10.9.1",
     "twilio": "^4.7.2",
     "typescript": "4.9.4"
   },
@@ -34,5 +35,8 @@
     "prettier-plugin-tailwindcss": "^0.2.2",
     "prisma": "^4.10.0",
     "tailwindcss": "^3.2.4"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }
