@@ -35,7 +35,10 @@ const StreamS: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<MessageForm>();
   const { data, mutate } = useSWR<StreamResponse>(
-    router.query.id ? `/api/streams/${router.query.id}` : null
+    router.query.id ? `/api/streams/${router.query.id}` : null,
+    {
+      refreshInterval: 1000, // 현재 상태에서는 serverless와 next.js만 사용중이기때문에 실시간 채팅이 아니다 따라서, refreshInterval를 추가하여 1초마다 갱신되는 데이터값을 가져와서 실시간 처럼 보이게한다.
+    }
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
     `/api/streams/${router.query.id}/messages`
@@ -43,15 +46,29 @@ const StreamS: NextPage = () => {
   const onValid = (form: MessageForm) => {
     if (loading) return;
     reset();
-    sendMessage(form);
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              {
+                id: Date.now(),
+                message: form.message,
+                user: {
+                  ...user,
+                },
+              },
+            ],
+          },
+        } as any),
+      false
+    );
+    sendMessage(form); // 최종적으로 입력한 메세지를 실제 db에 저장함.
   };
-
-  useEffect(() => {
-    if (sendMessageData && sendMessageData.ok) {
-      mutate();
-    }
-  }, [sendMessageData, mutate]);
-
   useEffect(() => {
     scrollRef?.current?.scrollIntoView();
   });
@@ -71,9 +88,6 @@ const StreamS: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Live Chat</h2>
           <div className="h-[50vh] space-y-4 overflow-y-scroll py-10  px-4 pb-16">
-            {/* <Message message="Hi how much are you selling them for?" />
-            <Message message="I want ￦20,000" reversed />
-            <Message message="미쳤어" /> */}
             {data?.stream.messages.map((message) => (
               <Message
                 key={message.id}
