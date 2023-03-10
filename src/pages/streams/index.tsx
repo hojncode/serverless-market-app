@@ -1,22 +1,40 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
+import { useInfiniteScroll } from "@/libs/client/useInfiniteScroll";
 import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
 
 interface StreamsResponse {
   ok: boolean;
   streams: Stream[];
+  pages: number;
 }
 
-const Streams: NextPage = () => {
-  const { data } = useSWR<StreamsResponse>(`/api/streams?page=3`);
+const getKey = (pageIndex: number, previousPageData: StreamsResponse) => {
+  if (pageIndex === 0) return `/api/streams?page=1`;
+  if (pageIndex + 1 > previousPageData.pages) return null;
+  return `/api/streams?page=${pageIndex + 1}`;
+};
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+const Streamss: NextPage = () => {
+  const { data, setSize } = useSWRInfinite<StreamsResponse>(getKey, fetcher);
+  const streams = data ? data.map((item) => item.streams).flat() : [];
+  const page = useInfiniteScroll();
+  useEffect(() => {
+    setSize(page);
+  }, [setSize, page]);
+
   console.log("data!!!!!!!!!", data);
+
   return (
     <Layout hasTabBar title="라이브">
       <div className="space-y-4 divide-y-[1px]">
-        {data?.streams?.map((stream) => (
+        {streams?.map((stream) => (
           <Link legacyBehavior key={stream.id} href={`/streams/${stream.id}`}>
             <a className="border-none px-4 pt-4">
               <div className="aspect-video w-full rounded-md bg-slate-300 shadow-md" />
@@ -47,4 +65,4 @@ const Streams: NextPage = () => {
   );
 };
 
-export default Streams;
+export default Streamss;

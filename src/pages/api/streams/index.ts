@@ -13,6 +13,7 @@ async function handler(
   const {
     session: { user },
     body: { name, price, description },
+    query: { page },
   } = req;
   console.log("price!!!", typeof price);
 
@@ -34,8 +35,12 @@ async function handler(
       stream,
     });
   } else if (req.method === "GET") {
-    const streams = await client.stream.findMany();
-    res.json({ ok: true, streams });
+    const streamCount = await client.stream.count();
+    const streams = await client.stream.findMany({
+      take: 10,
+      skip: (+page! - 1) * 10,
+    });
+    res.json({ ok: true, streams, pages: Math.ceil(streamCount / 10) });
   }
 }
 
