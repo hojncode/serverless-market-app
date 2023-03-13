@@ -37,6 +37,10 @@ const EditProfile: NextPage = () => {
     if (user?.name) setValue("name", user.name);
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
+    if (user?.avatar)
+      setAvatarPreview(
+        `https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${user?.avatar}/public`
+      );
   }, [user, setValue]);
 
   const [editProfile, { data, loading }] =
@@ -51,22 +55,27 @@ const EditProfile: NextPage = () => {
     if (avatar && avatar.length > 0 && user) {
       //** avatar.length > 0 ==>유저가 이미지(아바타)를 업로드 했다는 뜻.  */
       //TODO: ask for CF URL
-      const { id, uploadURL } = await (await fetch(`/api/files`)).json(); //const cloudflareURL = await cloudflareRequest.json() 를 await 중첩으로 코드를 줄임.
+      const { uploadURL } = await (await fetch(`/api/files`)).json(); //const cloudflareURL = await cloudflareRequest.json() 를 await 중첩으로 코드를 줄임.
       // console.log("cloudflareRequest!!!", cloudflareRequest);
 
       const form = new FormData();
       form.append("file", avatar[0], user?.id + ""); // file을 먼저 태그에서 찾고, 업로드된 이미지를 avatar로 명명했고 (avatar[0] 이 이미지의 내용임), 세번째 파라미터는 cloudflare에 저장될때의 이름값을 지정한것.
-      await fetch(uploadURL, {
-        method: "POST",
-        body: form,
-      });
+      const {
+        result: { id },
+      } = await (
+        await fetch(uploadURL, {
+          method: "POST",
+          body: form,
+        })
+      ).json();
+      console.log("ididid!!!", id);
       //TODO: upload file to CF URL
-      return;
       editProfile({
         email,
         phone,
         name,
-        //TODO: avatarURL : CF URL
+        //TODO: avatarID : CF URL
+        avatarID: id,
       });
     } else {
       editProfile({
