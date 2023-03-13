@@ -48,11 +48,18 @@ const EditProfile: NextPage = () => {
         message: "이메일 또는 전화번호 입력이 필요합니다.",
       });
     }
-    if (avatar && avatar.length > 0) {
+    if (avatar && avatar.length > 0 && user) {
       //** avatar.length > 0 ==>유저가 이미지(아바타)를 업로드 했다는 뜻.  */
       //TODO: ask for CF URL
-      const cloudflareRequest = await (await fetch(`/api/files`)).json(); //const cloudflareURL = await cloudflareRequest.json() 를 await 중첩으로 코드를 줄임.
-      console.log(cloudflareRequest);
+      const { id, uploadURL } = await (await fetch(`/api/files`)).json(); //const cloudflareURL = await cloudflareRequest.json() 를 await 중첩으로 코드를 줄임.
+      // console.log("cloudflareRequest!!!", cloudflareRequest);
+
+      const form = new FormData();
+      form.append("file", avatar[0], user?.id + ""); // file을 먼저 태그에서 찾고, 업로드된 이미지를 avatar로 명명했고 (avatar[0] 이 이미지의 내용임), 세번째 파라미터는 cloudflare에 저장될때의 이름값을 지정한것.
+      await fetch(uploadURL, {
+        method: "POST",
+        body: form,
+      });
       //TODO: upload file to CF URL
       return;
       editProfile({
