@@ -41,20 +41,33 @@ const EditProfile: NextPage = () => {
 
   const [editProfile, { data, loading }] =
     useMutation<EditProfileResponse>(`/api/users/me`);
-  const onValid = ({ email, phone, name, avatar }: EditProfileForm) => {
-    console.log("avatar!!", avatar);
-    console.log("watch!!", watch("avatar"));
+  const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
     if (loading) return;
     if (email === "" && phone === "" && name === "") {
       return setError("formErrors", {
         message: "이메일 또는 전화번호 입력이 필요합니다.",
       });
     }
-    editProfile({
-      email,
-      phone,
-      name,
-    });
+    if (avatar && avatar.length > 0) {
+      //** avatar.length > 0 ==>유저가 이미지(아바타)를 업로드 했다는 뜻.  */
+      //TODO: ask for CF URL
+      const cloudflareRequest = await (await fetch(`/api/files`)).json(); //const cloudflareURL = await cloudflareRequest.json() 를 await 중첩으로 코드를 줄임.
+      console.log(cloudflareRequest);
+      //TODO: upload file to CF URL
+      return;
+      editProfile({
+        email,
+        phone,
+        name,
+        //TODO: avatarURL : CF URL
+      });
+    } else {
+      editProfile({
+        email,
+        phone,
+        name,
+      });
+    }
   };
 
   useEffect(() => {
