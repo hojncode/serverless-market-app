@@ -12,166 +12,166 @@ datasource db {
 }
 
 model User {
-  id               Int          @id @default(autoincrement())
-  phone            String?      @unique
-  email            String?      @unique
-  name             String   
-  avatar           String?    
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  tokens           Token[]
-  products         Product[]
-  posts            Post[]
-  answers          Answer[]
-  wonderings       wondering[]
-  writtenReviews   Review[]     @relation(name:"writtenReviews")
-  receivedReviews  Review[]     @relation(name:"receivedReviews")
-  fav              Fav[]
-  sales            Sale[]
-  purchases        Purchase[]
-  record           Record[] //enum 사용.
-  streams          Stream[]
-  messages         Message[]
-} 
+  id              Int         @id @default(autoincrement())
+  phone           String?     @unique
+  email           String?     @unique
+  name            String
+  avatar          String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  tokens          Token[]
+  products        Product[]
+  posts           Post[]
+  answers         Answer[]
+  wonderings      wondering[]
+  writtenReviews  Review[]    @relation(name: "writtenReviews")
+  receivedReviews Review[]    @relation(name: "receivedReviews")
+  fav             Fav[]
+  sales           Sale[]
+  purchases       Purchase[]
+  record          Record[] //enum 사용.
+  streams         Stream[]
+  messages        Message[]
+}
 
 model Token {
-  id               Int          @id @default(autoincrement())
-  payload          String       @unique
-  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId           Int    
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  id        Int      @id @default(autoincrement())
+  payload   String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
 }
 
 model Product {
-  id               Int          @id @default(autoincrement())
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId           Int    
-  image            String   
-  name             String   
-  price            Int    
-  description      String       @db.MediumText
-  favs             Fav[]
-  sales            Sale[]
-  purchases        Purchase[]
-  record           Record[]  //enum 사용.
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  image       String
+  name        String
+  price       Int
+  description String     @db.MediumText
+  favs        Fav[]
+  sales       Sale[]
+  purchases   Purchase[]
+  records     Record[] //enum 사용.
 
   @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
 }
 
 model Post {
-  id                Int         @id @default(autoincrement())
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int   
-  question          String      @db.MediumText // db에서 String의 길이 제한 MediumText 으로 설정.
-  latitude          Float?
-  longitude         Float?
-  answers           Answer[]
-  wondering         wondering[]
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  question  String      @db.MediumText // db에서 String의 길이 제한 MediumText 으로 설정.
+  latitude  Float?
+  longitude Float?
+  answers   Answer[]
+  wondering wondering[]
 
-  @@index([userId]) 
+  @@index([userId])
 }
 
 model Answer {
-  id                Int         @id @default(autoincrement())
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int   
-  post              Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId            Int   
-  answer            String      @db.MediumText
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  answer    String   @db.MediumText
 
-  @@index([userId]) 
-  @@index([postId]) 
+  @@index([userId])
+  @@index([postId])
 }
 
 model wondering {
-  id                Int         @id @default(autoincrement())
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int   
-  post              Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId            Int
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
 
-  @@index([userId]) 
-  @@index([postId]) 
-
+  @@index([userId])
+  @@index([postId])
 }
 
 model Review {
-  id                Int         @id @default(autoincrement())
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  review            String      @db.MediumText
-  createdBy         User        @relation(name:"writtenReviews", fields: [createdById], references: [id], onDelete: Cascade)
-  createdById       Int
-  createdFor        User        @relation(name:"receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
-  createdForId      Int
-  score             Int         @default(1)  // 이미 작성된 테이블에 튜플을 추가할 경우, 기존 타입에 ?를 추가해서 Non-required로 만들거나 / default를 추가해줄 수 있다.
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  review       String   @db.MediumText
+  createdBy    User     @relation(name: "writtenReviews", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById  Int
+  createdFor   User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
+  createdForId Int
+  score        Int      @default(1) // 이미 작성된 테이블에 튜플을 추가할 경우, 기존 타입에 ?를 추가해서 Non-required로 만들거나 / default를 추가해줄 수 있다.
+
   @@index([createdById])
   @@index([createdForId])
 }
 
 model Sale {
-  id                Int         @id @default(autoincrement())
-  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int   
-  product           Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId         Int   
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
   @@index([productId])
 }
 
 model Purchase {
-  id                Int         @id @default(autoincrement())
-  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int   
-  product           Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId         Int   
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
   @@index([productId])
 }
 
 model Fav {
-  id                Int         @id @default(autoincrement())
-  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int   
-  product           Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId         Int   
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
   @@index([productId])
 }
 
 model Record {
-  id                Int          @id @default(autoincrement())
-  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int    
-  product           Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId         Int    
-  createdAt         DateTime     @default(now())
-  kind              Kind     
-  updatedAt         DateTime     @updatedAt
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  createdAt DateTime @default(now())
+  kind      Kind
+  updatedAt DateTime @updatedAt
 
   @@index([userId]) // *Relation mode* https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
   @@index([productId])
-}  
+}
 
 // enum 사용하기 . 공통된 테이블이 있을때 중복사용을 줄일 수 있다.
 // Record 를 만들고, Kind에는 테이블명만 작성한다.
@@ -185,30 +185,29 @@ enum Kind {
 }
 
 model Stream {
-  id                Int          @id @default(autoincrement())
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
-  name              String
-  description       String       @db.MediumText
-  price             Int
-  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int
-  messages          Message[]
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String
+  description String    @db.MediumText
+  price       Int
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  messages    Message[]
 
-  @@index([userId]) 
+  @@index([userId])
 }
 
 model Message {
-  id                Int          @id @default(autoincrement())
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
-  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int
-  message           String       @db.MediumText
-  stream            Stream       @relation(fields: [streamId], references: [id], onDelete: Cascade)
-  streamId          Int
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  message   String   @db.MediumText
+  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId  Int
 
   @@index([userId])
   @@index([streamId])
 }
-
