@@ -26,33 +26,33 @@ async function handler(
     });
   }
   if (req.method === "POST") {
-  }
-  const {
-    body: { name, price, description },
-    session: { user },
-  } = req;
-  /** 축약할 수 있다. 위 방법과 같다  */
-  //   const { name, price, description } = req.body;
-  //   const { user } = req.session;
+    const {
+      body: { name, price, description, photoId },
+      session: { user },
+    } = req;
+    console.log("에러어디냐!", photoId);
+    /** 축약할 수 있다. 위 방법과 같다  */
+    //   const { name, price, description } = req.body;
+    //   const { user } = req.session;
 
-  const product = await client.product.create({
-    data: {
-      name,
-      price: +price,
-      description,
-      image: "xx",
-      user: {
-        connect: {
-          id: user?.id,
+    const product = await client.product.create({
+      data: {
+        name,
+        price: +price,
+        description,
+        image: photoId,
+        user: {
+          connect: {
+            id: user?.id,
+          },
         },
       },
-    },
-  });
-
-  res.json({
-    ok: true,
-    product,
-  });
+    });
+    res.json({
+      ok: true,
+      product,
+    });
+  }
 }
 export default withApiSession(
   withHandler({ method: ["POST", "GET"], handler })
