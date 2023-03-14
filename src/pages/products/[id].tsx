@@ -5,6 +5,7 @@ import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";
 import { Product, User } from "@prisma/client";
 import { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
@@ -44,12 +45,25 @@ const ItemDetail: NextPage = () => {
     <Layout canGoBack>
       <div className="px-4 py-4">
         <div className="mb-8">
-          <img
-            src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${data?.product?.image}/public`}
-            className="h-96 bg-slate-300"
-          />
+          <div className="relative pb-20">
+            <Image
+              alt=""
+              fill
+              src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${data?.product?.image}/public`}
+              className="h-96 bg-slate-300 object-cover"
+            />
+            <h1 className="absolute w-full text-center text-yellow-500">
+              hello
+            </h1>
+          </div>
           <div className="flex cursor-pointer  items-center space-x-3 border-t border-b py-3">
-            <img src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${data?.product?.user.avatar}/avatar`} className="h-12 w-12 rounded-full bg-slate-300" />
+            <Image
+              width={50}
+              height={50}
+              alt="avatar"
+              src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${data?.product?.user?.avatar}/avatar`}
+              className="h-12 w-12 rounded-full bg-slate-300"
+            />
             <div>
               <p className="text-sm font-medium text-gray-700">
                 {data?.product?.user?.name}
