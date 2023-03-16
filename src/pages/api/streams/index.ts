@@ -16,21 +16,30 @@ async function handler(
   } = req;
   console.log("price!!!", typeof price);
 
-  let page =
-    req.query.page && req.query.page !== undefined ? +req.query?.page : 1;
-  let skip: number = (page - 1) * 10;
-  if (!skip) {
-    skip = 1;
-  }
-  const rowCnt = await client.stream.count({
-    select: {
-      _all: true,
-    },
-  });
-
   if (req.method === "POST") {
+    const {
+      result: {
+        uid,
+        rtmps: { streamKey, url },
+      },
+    } = await (
+      await fetch(
+        `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUD_FLARE_STREAM_API_TOKEN}/stream/live_inputs`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.CLOUD_FLARE_TOKEN}`,
+          },
+          body: `{"meta": {"name":${name}},"recording": { "mode": "automatic","timeoutSeconds": 10 }}`,
+        }
+      )
+    ).json();
+    console.log("streams/response!!!", { uid, rtmps: { streamKey, url } });
     const stream = await client.stream.create({
       data: {
+        cloudflareId: "uid",
+        cloudflareUrl: "url",
+        cloudflareKey: "streamKey",
         name,
         price: +price,
         description,
@@ -46,6 +55,17 @@ async function handler(
       stream,
     });
   } else if (req.method === "GET") {
+    let page =
+      req.query.page && req.query.page !== undefined ? +req.query?.page : 1;
+    let skip: number = (page - 1) * 10 + 1;
+    if (!skip) {
+      skip = 1;
+    }
+    const rowCnt = await client.stream.count({
+      select: {
+        _all: true,
+      },
+    });
     const streams = await client.stream.findMany({
       take: 10,
       skip,

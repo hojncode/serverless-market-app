@@ -3,6 +3,7 @@ import Layout from "@/components/layout";
 import Pagination from "@/components/pagination";
 import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -32,8 +33,17 @@ const Streams: NextPage = () => {
       <div className="space-y-4 divide-y-[1px]">
         {data?.streams?.map((stream) => (
           <Link legacyBehavior key={stream.id} href={`/streams/${stream.id}`}>
-            <a className="border-none px-4 pt-4">
-              <div className="aspect-video w-full rounded-md bg-slate-300 shadow-md" />
+            <a className="block px-4 pt-4">
+              {/* Thumbnail */}
+              <div className="relative aspect-video w-full rounded-md  bg-slate-300 shadow-sm">
+                <Image
+                  className="absolute rounded-md bg-orange-500"
+                  fill
+                  src={``}
+                  // src={`https://${stream.cloudflareId}.cloudflarestream.com/${stream.cloudflareUrl}/thumbnails/thumbnail.jpg?time=1s&height=270`}
+                  alt=""
+                />
+              </div>
               <h1 className="mt-2 text-2xl font-bold text-gray-900">
                 {stream.name}
               </h1>

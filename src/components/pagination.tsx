@@ -32,11 +32,9 @@ export default function Pagination({ nowPage, dataSize }: PaginationProps) {
         nowPage + 1,
         nowPage + 2,
       ]);
-    }
-    if (nowPage !== undefined && nowPage <= 3) {
+    } else if (nowPage !== undefined && nowPage <= 3) {
       setShowPage([1, 2, 3, 4, 5]);
-    }
-    if (nowPage !== undefined && nowPage + 3 >= maxPage) {
+    } else if (nowPage !== undefined && nowPage + 3 >= maxPage) {
       setShowPage([
         maxPage - 4,
         maxPage - 3,

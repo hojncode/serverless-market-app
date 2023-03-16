@@ -70,13 +70,28 @@ const StreamS: NextPage = () => {
     );
     sendMessage(form); // 최종적으로 입력한 메세지를 실제 db에 저장함.
   };
+
   useEffect(() => {
-    scrollRef?.current?.scrollIntoView();
-  });
+    scrollRef?.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "end",
+    });
+  }, [sendMessage]);
+
   return (
     <Layout canGoBack>
       <div className="space-y-4 py-10  px-4">
-        <div className="aspect-video w-full rounded-md bg-slate-300 shadow-sm" />
+        {data?.stream.cloudflareId ? (
+          <iframe
+            className="aspect-video w-full rounded-md bg-slate-300 shadow-sm"
+            src={`https://customer-<CODE>.cloudflarestream.com/${data?.stream.cloudflareId}/iframe`}
+            height="360"
+            width="640"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowFullScreen={true}
+          ></iframe>
+        ) : null}
         <div className="mt-5">
           <h1 className="text-3xl font-bold text-gray-900">
             {data?.stream?.name}
@@ -85,10 +100,21 @@ const StreamS: NextPage = () => {
             ₩{data?.stream?.price}
           </span>
           <p className=" my-6 text-gray-700">{data?.stream?.description}</p>
+          <div className="flex flex-col space-y-3 overflow-hidden rounded-md bg-orange-300 p-5">
+            <span>Stream keys (secret)</span>
+            <span className="text-gray-600">
+              <span className="font-medium text-gray-800">URL</span>{" "}
+              {data?.stream.cloudflareUrl}
+            </span>
+            <span className="text-gray-600">
+              <span className="font-medium text-gray-800">Key</span>{" "}
+              {data?.stream.cloudflareKey}
+            </span>
+          </div>
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Live Chat</h2>
-          <div className="h-[50vh] space-y-4 overflow-y-scroll py-10  px-4 pb-16">
+          <div className="h-[50vh] space-y-4 overflow-y-scroll py-10 px-4 pb-16">
             {data?.stream.messages.map((message) => (
               <Message
                 key={message.id}
@@ -98,7 +124,7 @@ const StreamS: NextPage = () => {
             ))}
             <div ref={scrollRef} />
           </div>
-          <div className="fixed inset-x-0 bottom-0  bg-white py-2">
+          <div className="fixed inset-x-0 bottom-0  mx-auto max-w-xl rounded-md bg-slate-300 py-2">
             <form
               onSubmit={handleSubmit(onValid)}
               className="relative mx-auto flex w-full  max-w-md items-center"
