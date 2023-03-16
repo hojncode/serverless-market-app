@@ -9,7 +9,7 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  console.log("req.session.user!!!", req.session.user);
+  console.log("api/users/me/req.session.user!!!", req.session.user);
 
   if (req.method === "GET") {
     const profile = await client.user.findUnique({

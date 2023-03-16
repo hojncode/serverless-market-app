@@ -9,7 +9,7 @@ async function handler(
 ) {
   // console.log("req.session!!", req.session);
   const { token } = req.body;
-  console.log("token!!", token);
+  console.log("api/users/confirm/token!!", token);
   const foundToken = await client.token.findUnique({
     where: {
       payload: token,

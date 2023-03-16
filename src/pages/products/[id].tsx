@@ -41,7 +41,7 @@ const ItemDetail: NextPage = () => {
   console.log("data!!!", data);
 
   return (
-    <Layout canGoBack>
+    <Layout hasTabBar canGoBack>
       <div className="px-4 py-4">
         <div className="mb-8">
           <img
@@ -49,7 +49,10 @@ const ItemDetail: NextPage = () => {
             className="h-96 bg-slate-300"
           />
           <div className="flex cursor-pointer  items-center space-x-3 border-t border-b py-3">
-            <img src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${data?.product?.user.avatar}/avatar`} className="h-12 w-12 rounded-full bg-slate-300" />
+            <img
+              src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${data?.product?.user.avatar}/avatar`}
+              className="h-12 w-12 rounded-full bg-slate-300"
+            />
             <div>
               <p className="text-sm font-medium text-gray-700">
                 {data?.product?.user?.name}
@@ -69,7 +72,7 @@ const ItemDetail: NextPage = () => {
               {data?.product?.name}
             </h1>
             <span className="mt-3 block text-3xl text-gray-900">
-              ${data?.product?.price}
+              ₩ {data?.product?.price}
             </span>
             <p className="my-6 text-base text-gray-700">
               {data?.product?.description}
