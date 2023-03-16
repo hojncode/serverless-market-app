@@ -1,4 +1,7 @@
+import useUser from "@/libs/client/useUser";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
 interface ItemProps {
   title: string;
@@ -6,6 +9,7 @@ interface ItemProps {
   price: number;
   comments: number;
   hearts: number;
+  image?: string;
 }
 
 export default function Item({
@@ -14,12 +18,18 @@ export default function Item({
   comments,
   hearts,
   id,
+  image,
 }: ItemProps) {
   return (
     <Link legacyBehavior href={`/products/${id}`}>
       <a className="flex cursor-pointer justify-between px-4 pt-5">
         <div className="flex space-x-4">
-          <div className="h-20 w-20 rounded-md bg-gray-400" />
+          <div className="relative h-20 w-20 rounded-md bg-gray-400">
+            <img
+              src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${image}/public`}
+              className="absolute h-20 w-20 bg-white object-contain"
+            />
+          </div>
           <div className="flex flex-col pt-2">
             <h3 className="text-sm font-medium text-gray-900">{title}</h3>
             <span className="mt-1 font-medium text-gray-900">${price}</span>
