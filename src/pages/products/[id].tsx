@@ -40,6 +40,11 @@ const ItemDetail: NextPage = () => {
   };
   console.log("data!!!", data);
 
+  const onClickTalkToSeller = () => {
+    console.log("hihihihih");
+    router.push(`/chats/${router.query.id}`);
+  };
+
   return (
     <Layout hasTabBar canGoBack>
       <div className="px-4 py-4">
@@ -78,7 +83,11 @@ const ItemDetail: NextPage = () => {
               {data?.product?.description}
             </p>
             <div className="flex items-center justify-between space-x-2">
-              <Button large text="Talk to seller" />
+              <Button
+                large
+                text="Talk to seller!!"
+                onClick={onClickTalkToSeller}
+              />
               <button
                 onClick={onFavClick}
                 className={cls(
