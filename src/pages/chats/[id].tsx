@@ -1,17 +1,84 @@
+import ChatMessage from "@/components/chat-message";
 import Layout from "@/components/layout";
-import Message from "@/components/message";
+import useMutation from "@/libs/client/useMutation";
+import useUser from "@/libs/client/useUser";
+import { Product } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import useSWR from "swr";
+import { register } from "ts-node";
+import products from "../api/products";
+
+interface ProductChatMsg {
+  id: number;
+  chatMessage: string;
+  user: {
+    avatar?: string;
+    id: number;
+  };
+}
+interface ProductWithChat extends Product {
+  chat: ProductChatMsg[];
+}
+interface ProductResponse {
+  ok: true;
+  product: ProductWithChat;
+  isLiked?: Boolean;
+  relatedProducts?: [];
+}
+interface ChatMsgForm {
+  inputMessage: string;
+}
 
 const ChatDetail: NextPage = () => {
+  const { register, handleSubmit, reset } = useForm<ChatMsgForm>();
+  const { user } = useUser();
+  const router = useRouter();
+  const { data, mutate } = useSWR<ProductResponse>(
+    router.query.id ? `/api/products/${router.query.id}` : null
+  );
+  console.log(data);
+  const [] = useMutation(``);
+
+  const onValid = (form: ChatMsgForm) => {
+    // if (loading) return;
+    reset();
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          product: {
+            ...prev.product,
+            chat: [
+              ...prev.product.chat,
+              {
+                id: Date.now(),
+                chatMessage: form.inputMessage,
+                user: {
+                  ...user,
+                },
+              },
+            ],
+          },
+        } as any)
+    );
+  };
+
   return (
     <Layout canGoBack title="Steve">
       <div className="space-y-4 py-10 px-4 pb-16">
-        <Message message="Hi how much are you selling them for?" />
-        <Message message="I want ￦20,000" reversed />
-        <Message message="미쳤어" />
-        <form className="fixed inset-x-0 bottom-0  bg-white py-2">
+        {data?.product?.chat.map((chatMsg) => (
+          <ChatMessage key={chatMsg.id} message={chatMsg.chatMessage} />
+        ))}
+        <form
+          onSubmit={handleSubmit(onValid)}
+          className="fixed inset-x-0 bottom-0  bg-white py-2"
+        >
           <div className="relative mx-auto flex w-full  max-w-md items-center">
             <input
+              {...register("inputMessage", { required: true })}
               type="text"
               className="w-full rounded-full border-gray-300 pr-12 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
             />

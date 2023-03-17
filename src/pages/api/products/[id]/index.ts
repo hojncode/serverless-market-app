@@ -26,6 +26,18 @@ async function handler(
           avatar: true,
         },
       },
+      chat: {
+        select: {
+          id: true,
+          chatMessage: true,
+          user: {
+            select: {
+              avatar: true,
+              id: true,
+            },
+          },
+        },
+      },
     },
   });
   const terms = product?.name.split(" ").map((word) => ({
