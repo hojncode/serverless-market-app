@@ -2,6 +2,7 @@ import client from "@/libs/server/client";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withApiSession } from "@/libs/server/withSession";
+import { dbNow } from "@/libs/server/timezone";
 
 async function handler(
   req: NextApiRequest,
@@ -35,8 +36,11 @@ async function handler(
     //   const { name, price, description } = req.body;
     //   const { user } = req.session;
 
+    const now = dbNow();
+
     const product = await client.product.create({
       data: {
+        createdAt: now,
         name,
         price: +price,
         description,
