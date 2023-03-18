@@ -36,13 +36,16 @@ const ChatDetail: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
   const { data, mutate } = useSWR<ProductResponse>(
-    router.query.id ? `/api/products/${router.query.id}` : null
+    router.query.id ? `/api/products/${router.query.id}` : null,
+    { revalidateOnFocus: false }
   );
   console.log(data);
-  const [] = useMutation(``);
+  const [sendChatMsg, { loading }] = useMutation(
+    `/api/chats/${router.query.id}/chatmsg`
+  );
 
   const onValid = (form: ChatMsgForm) => {
-    // if (loading) return;
+    if (loading) return;
     reset();
     mutate(
       (prev) =>
@@ -62,15 +65,22 @@ const ChatDetail: NextPage = () => {
               },
             ],
           },
-        } as any)
+        } as any),
+      false // false 를 추가해야 메세지 입력후 바로 화면에 출력된다.
     );
+    sendChatMsg(form);
   };
 
   return (
     <Layout canGoBack title="Steve">
       <div className="space-y-4 py-10 px-4 pb-16">
         {data?.product?.chat.map((chatMsg) => (
-          <ChatMessage key={chatMsg.id} message={chatMsg.chatMessage} />
+          <ChatMessage
+            key={chatMsg.id}
+            message={chatMsg.chatMessage}
+            reversed={chatMsg.user.id === user?.id}
+            avatarUrl={chatMsg.user.avatar}
+          />
         ))}
         <form
           onSubmit={handleSubmit(onValid)}

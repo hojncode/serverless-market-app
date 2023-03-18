@@ -12,8 +12,6 @@ export default function ChatMessage({
   avatarUrl,
   reversed,
 }: MessageProps) {
-  const { user } = useUser();
-  // console.log("useresra21313", user);
   return (
     <div
       className={cls(
@@ -23,7 +21,7 @@ export default function ChatMessage({
     >
       <div className="mx-2 h-8 w-8 rounded-full bg-slate-400">
         <img
-          src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${user?.avatar}/avatar`}
+          src={`https://imagedelivery.net/TdG7TK877WEVMND6U9bQvA/${avatarUrl}/avatar`}
         />
       </div>
       <div className="w-1/2 rounded-md border border-gray-300 p-2 text-sm text-gray-700">
