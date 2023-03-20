@@ -39,8 +39,8 @@ async function handler(
       query: { latitude, longitude },
     } = req;
     // console.log(latitude, longitude);
-    const parsedLatitude = parseFloat(latitude.toString());
-    const parsedLongitude = parseFloat(longitude.toString());
+    const parsedLatitude = parseFloat(latitude!.toString());
+    const parsedLongitude = parseFloat(longitude!.toString());
 
     const posts = await client.post.findMany({
       include: {
