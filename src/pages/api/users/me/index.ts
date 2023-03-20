@@ -3,7 +3,6 @@ import client from "@/libs/server/client";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withApiSession } from "@/libs/server/withSession";
-import { is } from "immer/dist/internal";
 
 async function handler(
   req: NextApiRequest,
