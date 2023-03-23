@@ -5,7 +5,7 @@ import { cls } from "@/libs/client/utils";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
+import useSWR from "swr";
 interface EnterForm {
   email?: string;
   phone?: string;
@@ -28,7 +28,8 @@ export default function Enter() {
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
-
+  const { data: tdd } = useSWR(`api/users/confirm`);
+  // console.log("tdd", tdd);
   const onEmailClick = () => {
     reset();
     setMethod("email");
@@ -55,19 +56,18 @@ export default function Enter() {
   const onTokenValid = (validForm: TokenForm) => {
     if (tokenLoading) return;
     confirmToken(validForm);
-    console.log("validForm!!", validForm);
+    console.log("validForm!!", validForm, tokenLoading);
   };
   /** useRouter */
   const router = useRouter();
+
   /** useEffect */
   useEffect(() => {
-    if (tokenData?.ok) {
+    if (tdd?.checkCookie) {
       router.push("/");
     }
-  }, [tokenData, router]);
+  }, [tdd, router]);
 
-  // console.log(loading, data, error);
-  // console.log("datatatata", data);
   return (
     <div className="mt-16 px-4">
       <h3 className="text-center text-3xl font-bold">Enter to Carrot</h3>

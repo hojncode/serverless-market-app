@@ -56,7 +56,7 @@ export default function Layout({
 
       {/* hasTabBar */}
       {hasTabBar ? (
-        <nav className=" fixed bottom-0 flex w-full max-w-xl justify-between border-t bg-white px-10 pb-5 pt-3 text-xs text-gray-700">
+        <nav className=" fixed bottom-0 flex h-20 w-full max-w-xl justify-between border-t bg-white px-10 pb-5 pt-3 text-xs text-gray-700">
           <Link legacyBehavior href="/">
             <a
               className={cls(

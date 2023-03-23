@@ -10,38 +10,15 @@ async function handler(
   // console.log("req.session!!", req.session);
   const { token } = req.body;
   const { cookies } = req;
-  console.log("api/users/confirm/token!!", token);
-
+  let checkCookie = true;
   if (req.method === "POST") {
-    const foundToken = await client.token.findUnique({
-      where: {
-        payload: token,
-      },
-      // include: { user: true },
-    });
-    if (!foundToken) return res.status(404).end();
-    // console.log("foundToken!!", foundToken);
-    req.session.user = {
-      id: foundToken.userId,
-    };
-    await req.session.save();
-    await client.token.deleteMany({
-      where: {
-        userId: foundToken.userId,
-      },
-    });
-    // res.status(200).end();
-    res.json({ ok: true });
-  }
-
-  let checkCookie = false;
-  if (req.method === "GET") {
     if (Object.keys(cookies).length === 0) {
+      !checkCookie;
+      console.log("checkCookie!!", checkCookie);
       console.log("쿠키없어어");
     } else {
       console.log("쿠키있다!!");
-      checkCookie = true;
-      // await req.session.destroy();
+      await req.session.destroy();
     }
   }
   res.json({ ok: true, checkCookie });

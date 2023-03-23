@@ -72,8 +72,8 @@ const ChatDetail: NextPage = () => {
   };
 
   return (
-    <Layout canGoBack title="Steve">
-      <div className="space-y-4 py-10 px-4 pb-16">
+    <Layout hasTabBar canGoBack title="Steve">
+      <div className=" space-y-4 py-10 px-4 pb-16">
         {data?.product?.chat.map((chatMsg) => (
           <ChatMessage
             key={chatMsg.id}
@@ -84,7 +84,7 @@ const ChatDetail: NextPage = () => {
         ))}
         <form
           onSubmit={handleSubmit(onValid)}
-          className="fixed inset-x-0 bottom-0  bg-white py-2"
+          className="fixed inset-x-0 bottom-20  bg-white py-2"
         >
           <div className="relative mx-auto flex w-full  max-w-md items-center">
             <input

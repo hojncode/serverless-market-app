@@ -132,18 +132,18 @@ async function handler(
     // const message = await twilioClient.messages.create({
     //   messagingServiceSid: process.env.TWILIO_MSID,
     //   to: process.env.MY_PHONE!, // `!`를 붙임으로써 확실하게 존재하는 변수라고 타입스크립트에게 알려준다.
-    //   body: `Your login token is ${payload}`,
+    //   body: `Your login token is [${payload}]`,
     // });
     // console.log("TWILIO!!", message);
   } else if (email) {
-    // const email = await mail.send({
-    //   from: "glicm12@gmail.com",
-    //   to: "glicm12@gmail.com",
-    //   subject: "Your Carrot Market Verification Email",
-    //   text: `Your token is ${payload}`,
-    //   html: `<strong>Your token is ${payload}</strong>`,
-    // });
-    // console.log("SENDGRID!!", email);
+    const emailSENDGRID = await mail.send({
+      from: "glicm12@gmail.com",
+      to: email,
+      subject: "Your Carrot Market Verification Email",
+      text: `Your token is ${payload}`,
+      html: `<strong>Your token is ${payload}</strong>`,
+    });
+    console.log("SENDGRID!!", emailSENDGRID);
   }
 
   console.log("req", req.body); // FrontEnd 에서 (여기서 enter.jsx) headers를 추가 해주어야 .email 을 BackEnd 에서 받을 수 있다.(headers 입력 안할 시, req.body 까지만 백에서 받을 수 있다)

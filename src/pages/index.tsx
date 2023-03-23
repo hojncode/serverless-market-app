@@ -6,6 +6,7 @@ import useUser from "@/libs/client/useUser";
 import Head from "next/head";
 import useSWR from "swr";
 import { Product } from "@prisma/client";
+import useMutation from "@/libs/client/useMutation";
 
 export interface ProductWithCount extends Product {
   _count: {
@@ -18,12 +19,30 @@ interface ProductsResponse {
   products: ProductWithCount[];
 }
 
+interface ConfirmCookie {
+  ok: boolean;
+  checkCookie: boolean;
+}
+
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
   const { data } = useSWR<ProductsResponse>("/api/products");
-  console.log("Home/data!!!", data);
-  console.log("Home/user!!!", user);
-  console.log("Home/isLoading!!!", isLoading);
+  // const { mutate } = useSWR(`/api/users/logout`);
+  const { mutate } = useSWR<ConfirmCookie>(`/api/cookie`);
+  const [sendLogout] = useMutation(`/api/cookie`);
+
+  // const [cookies, setCookie, removeCookie] = useCookies([""]);
+  // console.log("Home/data!!!", data);
+  // console.log("Home/user!!!", user);
+  // console.log("Home/isLoading!!!", isLoading);
+  const onClickLogOut = (e: any) => {
+    console.log("onClickLogOut");
+    mutate((prev) => prev && { ...prev, checkCookie: !prev.checkCookie });
+    sendLogout({});
+    // mutate(event);
+    // sendLogout(event);
+    // req.session.destroy();
+  };
 
   return (
     <Layout hasTabBar title="홈">
@@ -34,6 +53,9 @@ const Home: NextPage = () => {
         "로딩중..."
       ) : (
         <div className="flex flex-col space-y-5 divide-y ">
+          <form>
+            <button onClick={onClickLogOut}>로그아웃</button>
+          </form>
           {data?.products?.map((product) => (
             <Item
               image={product.image}

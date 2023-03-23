@@ -37,7 +37,7 @@ const StreamS: NextPage = () => {
   const { data, mutate } = useSWR<StreamResponse>(
     router.query.id ? `/api/streams/${router.query.id}` : null,
     {
-      refreshInterval: 1000, // 현재 상태에서는 serverless와 next.js만 사용중이기때문에 실시간 채팅이 아니다 따라서, refreshInterval를 추가하여 1초마다 갱신되는 데이터값을 가져와서 실시간 처럼 보이게한다.
+      // refreshInterval: 1000, // 현재 상태에서는 serverless와 next.js만 사용중이기때문에 실시간 채팅이 아니다 따라서, refreshInterval를 추가하여 1초마다 갱신되는 데이터값을 가져와서 실시간 처럼 보이게한다.
       revalidateOnFocus: false, // 이 페이지에서만 refreshInterval가 동작시킴.
     }
   );
@@ -120,6 +120,7 @@ const StreamS: NextPage = () => {
                 key={message.id}
                 message={message.message}
                 reversed={message.user.id === user?.id} // user?.id는 useUser에서 오는 것.message.user.id가 현재 내가 작성한 메세지의 내 아이디값이기 때문에 따라서 내가 쓴 메세지는 화면 오른쪽에 붙는다.
+                avatarUrl={message.user.avatar}
               />
             ))}
             <div ref={scrollRef} />
