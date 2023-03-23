@@ -41,6 +41,7 @@ export default function Enter() {
 
   const onValid = (onValidForm: EnterForm) => {
     if (loading) return;
+    console.log("NOW~!~!~!~!");
     enter(onValidForm);
     // fetch("/api/users/enter", {
     //   method: "POST",
