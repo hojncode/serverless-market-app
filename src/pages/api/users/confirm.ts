@@ -7,7 +7,7 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  // console.log("req.session!!", req.session);
+  console.log("req.session!!여기 세션이다!!!!", req.session);
   const { token } = req.body;
   const { cookies } = req;
   console.log("api/users/confirm/token!!", token);
@@ -20,10 +20,11 @@ async function handler(
       // include: { user: true },
     });
     if (!foundToken) return res.status(404).end();
-    // console.log("foundToken!!", foundToken);
+    console.log("foundToken!!", foundToken);
     req.session.user = {
       id: foundToken.userId,
     };
+    res.setHeader("Content-Type", "application/json");
     await req.session.save();
     await client.token.deleteMany({
       where: {
