@@ -11,6 +11,7 @@ async function handler(
   const { token } = req.body;
   const { cookies } = req;
   console.log("api/users/confirm/token!!", token);
+  res.setHeader("Content-Type", "application/json");
 
   if (req.method === "POST") {
     const foundToken = await client.token.findUnique({
@@ -24,7 +25,6 @@ async function handler(
     req.session.user = {
       id: foundToken.userId,
     };
-    res.setHeader("Content-Type", "application/json");
     await req.session.save();
     await client.token.deleteMany({
       where: {
