@@ -26,7 +26,7 @@ export default function useMutation<T = any>(
     fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "text/html;",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
