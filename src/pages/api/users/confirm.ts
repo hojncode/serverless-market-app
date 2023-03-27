@@ -25,6 +25,7 @@ async function handler(
     req.session.user = {
       id: foundToken.userId,
     };
+    res.setHeader("Content-Type", "application/json");
     await req.session.save();
     await client.token.deleteMany({
       where: {
@@ -45,6 +46,7 @@ async function handler(
       // await req.session.destroy();
     }
   }
+  res.setHeader("Content-Type", "application/json");
   res.json({ ok: true, checkCookie });
 }
 
