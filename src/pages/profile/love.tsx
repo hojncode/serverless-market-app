@@ -5,7 +5,7 @@ import type { NextPage } from "next";
 
 const Love: NextPage = () => {
   return (
-    <Layout title="관심목록" canGoBack>
+    <Layout hasTabBar title="관심목록" canGoBack>
       <div className="flex flex-col space-y-5 divide-y  pb-10">
         <ProductList kind="favs" />
       </div>
