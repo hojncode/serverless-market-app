@@ -28,8 +28,8 @@ const Home: NextPage = () => {
   const { user, isLoading } = useUser();
   const { data } = useSWR<ProductsResponse>("/api/products");
   // const { mutate } = useSWR(`/api/users/logout`);
-  const { mutate } = useSWR<ConfirmCookie>(`/api/cookie`);
-  const [sendLogout] = useMutation(`/api/cookie`);
+  // const { mutate } = useSWR<ConfirmCookie>(`/api/confirm`);
+  // const [sendLogout] = useMutation(`/api/cookie`);
 
   // const [cookies, setCookie, removeCookie] = useCookies([""]);
   // console.log("Home/data!!!", data);
@@ -37,8 +37,8 @@ const Home: NextPage = () => {
   // console.log("Home/isLoading!!!", isLoading);
   const onClickLogOut = (e: any) => {
     console.log("onClickLogOut");
-    mutate((prev) => prev && { ...prev, checkCookie: !prev.checkCookie });
-    sendLogout({});
+    // mutate((prev) => prev && { ...prev, checkCookie: !prev.checkCookie });
+    // sendLogout({});
     // mutate(event);
     // sendLogout(event);
     // req.session.destroy();

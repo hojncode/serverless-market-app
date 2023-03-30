@@ -28,8 +28,8 @@ export default function Enter() {
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
-  const { data: tdd } = useSWR(`api/users/confirm`);
-  // console.log("tdd", tdd);
+  // const { data: tdd, isValidating } = useSWR(`api/users/confirm`);
+  // // console.log("tdd", tdd);
   const onEmailClick = () => {
     reset();
     setMethod("email");
@@ -64,10 +64,15 @@ export default function Enter() {
 
   /** useEffect */
   useEffect(() => {
-    if (tdd?.checkCookie) {
+    if (tokenData?.ok) {
       router.push("/");
     }
-  }, [tdd, router]);
+  }, [tokenData, router]);
+  // useEffect(() => {
+  //   if (tdd?.checkCookie) {
+  //     router.push("/");
+  //   } else return;
+  // }, [tdd, router, isValidating]);
 
   return (
     <div className="mt-16 px-4">
