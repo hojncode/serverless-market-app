@@ -20,7 +20,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log("foundToken!!", foundToken);
     req.session.user = {
       id: foundToken.userId,
-      admin: true,
+      // admin: true,
     };
     // res.setHeader("Content-Type", "text/html");
     await req.session.save();
