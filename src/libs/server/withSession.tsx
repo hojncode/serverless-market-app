@@ -13,7 +13,6 @@ declare module "iron-session" {
 const cookieConfig: IronSessionOptions = {
   cookieName: "carrotsession",
   password: process.env.COOKIE_PASSWORD!, // COOKIE_PASSWORD! ---> ! 붙이는 이유는 환경변수에서 가져와야하는데 undefined 일 수 있기때문에 !를 붙여서 무조건 값이 있다고 타입 설정을 해둔다.
-  secure: true,
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
   },
