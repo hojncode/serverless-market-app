@@ -8,7 +8,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { token } = req.body;
   const { cookies } = req;
   console.log("api/users/confirm/token!!", token);
-  // res.setHeader("Content-Type", "text/html");
   if (req.method === "POST") {
     const foundToken = await client.token.findUnique({
       where: {
@@ -20,9 +19,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log("foundToken!!", foundToken);
     req.session.user = {
       id: foundToken.userId,
-      // admin: true,
     };
-    // res.setHeader("Content-Type", "text/html");
     await req.session.save();
     await client.token.deleteMany({
       where: {
@@ -31,6 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
     // res.status(200).end();
     res.json({ ok: true });
+    return;
 
     // req.session.user = {
     //   id: 230,
@@ -40,16 +38,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   let checkCookie = false;
-  if (req.method === "GET") {
-    if (Object.keys(cookies).length === 0) {
-      console.log("쿠키없어어");
-    } else {
-      console.log("쿠키있다!!");
-      checkCookie = true;
-      // await req.session.destroy();
-    }
-  }
-  // res.setHeader("Content-Type", "text/html");
+  // if (req.method === "GET") {
+  //   if (Object.keys(cookies).length === 0) {
+  //     console.log("쿠키없어어");
+  //   } else {
+  //     console.log("쿠키있다!!");
+  //     checkCookie = true;
+  //     // await req.session.destroy();
+  //   }
+  // }
 
   res.json({ ok: true, checkCookie });
 }

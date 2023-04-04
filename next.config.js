@@ -74,30 +74,30 @@ const nextConfig = {
       // },
       // // if the source, query, and cookie are matched,
       // // the `x-authorized` header will be applied
-      // {
-      //   source: "/api/:path*",
-      //   has: [
-      //     {
-      //       type: "query",
-      //       key: "page",
-      //       // the page value will not be available in the
-      //       // header key/values since value is provided and
-      //       // doesn't use a named capture group e.g. (?<page>home)
-      //       value: "home",
-      //     },
-      //     {
-      //       type: "cookie",
-      //       key: "authorized",
-      //       value: "true",
-      //     },
-      //   ],
-      //   headers: [
-      //     {
-      //       key: "x-authorized",
-      //       value: ":authorized",
-      //     },
-      //   ],
-      // },
+      {
+        source: "/api/:path*",
+        has: [
+          {
+            type: "query",
+            key: "page",
+            // the page value will not be available in the
+            // header key/values since value is provided and
+            // doesn't use a named capture group e.g. (?<page>home)
+            value: "home",
+          },
+          {
+            type: "cookie",
+            key: "authorized",
+            value: "true",
+          },
+        ],
+        headers: [
+          {
+            key: "x-authorized",
+            value: ":authorized",
+          },
+        ],
+      },
       // // if the header `x-authorized` is present and
       // // contains a matching value, the `x-another-header` will be applied
       // {
