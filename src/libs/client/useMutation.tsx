@@ -28,6 +28,7 @@ export default function useMutation<T = any>(
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "omit",
       body: JSON.stringify(data),
     })
       .then((response) => response.json().catch(() => {})) // response 에 에러가 없으면 catch의 에러는 보이지 않는다.
