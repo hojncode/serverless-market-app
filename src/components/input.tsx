@@ -5,7 +5,7 @@ interface InputProps {
   name: string;
   kind?: "text" | "phone" | "price";
   type: string;
-  // [key: string]: any; // 어떤 prop 이든 보낼 수 있게 해준다.
+  [key: string]: any; // 어떤 prop 이든 보낼 수 있게 해준다.
   register: UseFormRegisterReturn;
   required: boolean;
   placeholder?: string;
