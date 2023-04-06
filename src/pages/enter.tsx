@@ -76,7 +76,7 @@ export default function Enter() {
 
   return (
     <div className="mt-16 px-4">
-      <h3 className="text-center text-3xl font-bold">Enter to Carrot</h3>
+      <h3 className="text-center text-3xl font-bold">Login</h3>
       <div className="mt-8">
         {data?.ok ? (
           <form
@@ -100,7 +100,7 @@ export default function Enter() {
             {/* div */}
             <div className="flex flex-col items-center">
               <h5 className="text-sm font-medium text-gray-500">
-                Enter using:
+                Choose Eamil or Phone
               </h5>
               <div className="mt-8 grid w-full grid-cols-2 gap-16 border-b">
                 <button
@@ -119,7 +119,7 @@ export default function Enter() {
 
                   onClick={onEmailClick}
                 >
-                  Email address
+                  Email
                 </button>
                 <button
                   className={cls(
@@ -130,7 +130,7 @@ export default function Enter() {
                   )}
                   onClick={onPhoneClick}
                 >
-                  Phone number
+                  Phone
                 </button>
               </div>
             </div>

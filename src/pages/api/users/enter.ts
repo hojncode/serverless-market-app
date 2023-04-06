@@ -129,17 +129,17 @@ async function handler(
   // }
 
   if (phone) {
-    // const message = await twilioClient.messages.create({
-    //   messagingServiceSid: process.env.TWILIO_MSID,
-    //   to: process.env.MY_PHONE!, // `!`를 붙임으로써 확실하게 존재하는 변수라고 타입스크립트에게 알려준다.
-    //   body: `Your login token is [${payload}]`,
-    // });
-    // console.log("TWILIO!!", message);
+    const message = await twilioClient.messages.create({
+      messagingServiceSid: process.env.TWILIO_MSID,
+      to: process.env.MY_PHONE!, // `!`를 붙임으로써 확실하게 존재하는 변수라고 타입스크립트에게 알려준다.
+      body: `Your login token is [${payload}]`,
+    });
+    console.log("TWILIO!!", message);
   } else if (email) {
     const emailSENDGRID = await mail.send({
       from: "glicm12@gmail.com",
       to: email,
-      subject: "Your Carrot Market Verification Email",
+      subject: "Your Verification Email",
       text: `Your token is ${payload}`,
       html: `<strong>Your token is ${payload}</strong>`,
     });
