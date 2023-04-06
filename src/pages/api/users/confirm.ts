@@ -38,15 +38,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   let checkCookie = false;
-  // if (req.method === "GET") {
-  //   if (Object.keys(cookies).length === 0) {
-  //     console.log("쿠키없어어");
-  //   } else {
-  //     console.log("쿠키있다!!");
-  //     checkCookie = true;
-  //     // await req.session.destroy();
-  //   }
-  // }
+  if (req.method === "GET") {
+    if (Object.keys(cookies).length === 0) {
+      console.log("쿠키없어어");
+    } else {
+      console.log("쿠키있다!!");
+      checkCookie = true;
+      // await req.session.destroy();
+    }
+  }
 
   res.json({ ok: true, checkCookie });
 }
