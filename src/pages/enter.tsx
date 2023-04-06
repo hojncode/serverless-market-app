@@ -66,7 +66,9 @@ export default function Enter() {
   useEffect(() => {
     if (tokenData?.ok) {
       router.push("/");
+      console.log("쿠키저장됨");
     }
+    return;
   }, [tokenData, router]);
   // useEffect(() => {
   //   if (tdd?.checkCookie) {
